@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proveedores Comercial Jennifer</title>
+    <!-- FA pencil-->
+    <link rel="shortcut icon" href="/resources/images/favicon.ico">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"/>
+    <!-- Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+    <!-- Boxicons -->
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
+      rel="stylesheet"/>
+    <!--Estilo CSS-->
+    <link rel="stylesheet" href="/resources/css/style.css" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.6/css/dataTables.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+	  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap5.min.css">
+  </head>
+  <body>
+    <%- include('sidebar.ejs') %>
+
+    <section class="home-section">
+
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="Container">
+          <div>
+            <div id="panelRegistroProveedor" class="panel-flotante panel-ancho" style="display: none">
+              <div class="panel-content">
+                <h4><b>Registrar a un nuevo proveedor</b></h4>
+
+                <div style="max-height: 300px; overflow-y: auto">
+                  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                      <form action="/AddProveedor" method="post" class="needs-validation" id="form" novalidate>
+
+                        <!-- Nombres -->
+                        <div class="mt-2 mb-2">
+                          <label for="Nombre" class="form-label"><b>Nombres del Proveedor</b></label>
+                          <input type="text" class="form-control" id="Tipo" name="Tipo_pro" placeholder="Tipo" value="Proveedor"  hidden/>
+                          <input type="text" class="form-control" id="Nombre" name="Nombre_pro" placeholder="Nombres del Proveedor" required/>
+                          <div class="invalid-feedback">Por favor ingrese los nombres del proveedor</div>
+                        </div>
+
+                        <!-- Apellidos -->
+                        <div class="mb-2">
+                          <label for="Apellido" class="form-label"><b>Apellidos del Proveedor</b></label>
+                          <input type="text" class="form-control" id="Apellido" name="Apellido_pro" placeholder="Apellidos" required/>
+                          <div class="invalid-feedback">Por favor ingrese los apellidos del proveedor</div>
+                        </div>
+
+                        <!-- Cedula -->
+                        <div class="mb-2">
+                          <label for="Cedula" class="form-label"><b>Cedula del Proveedor</b></label>
+                          <input type="text" class="form-control" id="Cedula" name="Cedula_pro" placeholder="Cedula del Proveedor" required/>
+                          <div class="invalid-feedback">Por favor ingrese la cedula del proveedor</div>
+                          <p id="error-message" class="error"></p>
+                        </div>
+
+                        <!-- Telefono -->
+                        <div class="mb-2">
+                          <label for="Telefono" class="form-label"><b>Teléfono del Proveedor</b></label>
+                          <input type="number" class="form-control" id="Telefono" name="Telefono_pro" placeholder="Telefono" maxlength="8" pattern="\d{8}" required/>
+                          <div class="invalid-feedback">Por favor ingrese el número de teléfono de 8 dígitos</div>
+                        </div>
+
+                        <!-- Comercio -->
+                        <div class="mb-2">
+                          <label for="Comercio" class="form-label"><b>Comercio al que pertenece el Proveedor</b></label>
+                          <input type="text" class="form-control" id="Comercio" name="Comercio_pro" placeholder="Comercio al que pertenece el Proveedor" required/>
+                          <div class="invalid-feedback">Por favor ingrese la cédula con el formato XXX-XXXXXX-XXXXY</div>
+                        </div>
+
+                        <!-- Distrito -->
+                        <div class="mb-1 position-relative">
+                          <h5 class="my-3 fw-bold">Dirección del Comercio</h5>
+
+                          <label for="Distrito_pro" class="form-label"><b>Seleccione el Distrito</b></label>
+                          <select id="Distrito_pro" name="Distrito_pro"  class="form-select mb-2 position-relative" aria-label="Distrito" required>
+                            <option selected disabled value="">
+                              Seleccionar Distrito...
+                            </option>
+                            <option value="I">Distrito I</option>
+                            <option value="II">Distrito II</option>
+                            <option value="III">Distrito III</option>
+                            <option value="IV">Distrito IV</option>
+                            <option value="V">Distrito V</option>
+                            <option value="VI">Distrito VI</option>
+                            <option value="VII">Distrito VII</option>
+                          </select>
+                          <div class="invalid-feedback">Por favor ingrese el distrito</div>
+                        </div>
+
+                        <!-- Zona de Residencia -->
+                        <div class="mb-2">
+                          <label for="Residencia" class="form-label fw-bold">Zona de Residencia</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="Residencia"
+                            name="Residencia_pro"
+                            placeholder="Zona de Residencia"
+                            required
+                          />
+                          <div
+                            class="invalid-feedback"
+                          >
+                            Por favor ingrese la zona donde reside el Comercio
+                          </div>
+                        </div>
+
+                        <!-- Punto Referencia -->
+                        <div class="mb-2">
+                          <label for="PuntoReferencia" class="form-label fw-bold"
+                            >Punto de Referencia</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="PuntoReferencia"
+                            name="PuntoReferencia_pro"
+                            placeholder="Punto de Referencia"
+                            required
+                          />
+                          <div
+                            class="invalid-feedback"
+                          >
+                            Por favor ingrese el punto de referencia de la dirección
+                          </div>
+                        </div>
+
+                        <!-- Distancia -->
+                        <div class="mb-2">
+                          <label for="Distancia" class="form-label fw-bold"
+                            >Distancia</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="Distancia"
+                            name="Distancia_pro"
+                            placeholder="Distancia"
+                          />
+                        </div>
+
+                        <!-- Casa -->
+                        <div class="mb-3">
+                          <label for="Casa" class="form-label fw-bold">Información local</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="Casa"
+                            name="Casa_pro"
+                            placeholder="Numero casa y/o color"
+                            required
+                          />
+                          <div
+                            class="invalid-feedback"
+                          >
+                            Por favor ingrese la información del local
+                          </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                          <button
+                            type="submit"
+                            class="btn btn-success"
+                            title="Guardar"
+                          >
+                            Guardar
+                          </button>
+                          <button
+                            class="btn btn-secondary"
+                            title="Limpiar Campos"
+                            onclick="Limpiar()"
+                          >
+                            Limpiar Campos
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+
+                  <div class="py-3">
+                    <button
+                    type="button"
+                    class="btn btn-danger "
+                    onclick="cerrarPanelRegistroProveedor()">
+                    Cerrar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="Container px-3 py-1 contenedorventas">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"></div>
+        <h4>Listado y Registro de proveedores</h4>
+      </div>
+
+      <div class="Container px-2">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="px-3 py-2">
+              <h4 style="display: flex; justify-content: space-between">
+                Listado de proveedores
+                <button type="button" class="btn btn-success" title="Historial" onclick="mostrarPanelRegistroProveedor()">
+                  <i class="fa-solid fa-user-plus mx-1"></i>    Registrar un nuevo proveedor
+                </button>
+              </h4>
+            </div>
+
+            <table class="table primary ml-1 hover" id="TableProveedores">
+              <thead>
+                <tr>
+                  <th class="centrado">Nombre completo</th>
+                  <th class="centrado">Cédula</th>
+                  <th class="centrado">Teléfono</th>
+                  <th class="centrado">Comercio</th>
+                  <th class="centrado">Dirección del Comercio</th>
+                  <th class="centrado">Estado Proveedor</th>
+                  <th class="centrado"></th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <% proveedores.forEach((prov) => { %>
+                  <tr>
+                    <td class="centrado"><%= prov.Nombre %></td>
+                    <td class="centrado"><%= prov.Cedula %></td>
+                    <td class="centrado"><%= prov.Telefono %></td>
+                    <td class="centrado"><%= prov.Comercio %></td>
+                    <td class="centrado"><%= prov.Dirección %></td>
+                    <td class="centrado"><%= prov.Estado %></td>
+                    <td>
+                      <!-- Botones de acciones -->
+                      <a
+                        href="/EditProveedor/<%= prov.Id_Proveedor %>"
+                        class="btn btn-success mb-1"
+                        title="Actualizar"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-pencil-square"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                          />
+                          <path
+                            fill-rule="evenodd"
+                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                          /></svg
+                      ></a>
+                    </td>
+                  </tr>
+                  <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+       
+      </div>
+    </section>
+
+    <script src="/resources/js/ScriptProveedor.js"></script>
+    <script src="/resources/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap5.min.js"></script>      
+
+    <!-- codigo js para las validaciones-->
+    <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (() => {
+        "use strict";
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll(".needs-validation");
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach((form) => {
+          form.addEventListener(
+            "submit",
+            (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+    </script>
+
+    <% if (typeof alert != "undefined") { %>
+    <script>
+      Swal.fire({
+        title: "<%= alertTitle %>",
+        text: "<%= alertMessage %>",
+        icon: "<%= alertIcon %>",
+        showConfirmButton: true,
+        timer: false,
+      }).then(() => {
+        window.location = "/<%= ruta %>";
+      });
+    </script>
+    <% } %>
+
+    <script>
+      $(document).ready(function(){
+          $('#TableProveedores').DataTable({
+              info: false,
+              ordering: false,
+              paging: false,
+              "oLanguage": {
+                  "sSearch": "Buscar a un Proveedor:"
+              },
+              "rowCallback": function( row, data ) {
+                  if (data[5] === "activo") { // Suponiendo que el estado está en la cuarta columna (índice 3)
+                      $(row).css('background-color', 'green');
+                  } else if (data[5] === "inactivo") {
+                      $(row).css('background-color', 'red');
+                  }
+              }
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compras Comercial Jennifer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/resources/css/style.css" />
+    <link rel="shortcut icon" href="/resources/images/favicon.ico" />
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.6/css/dataTables.dataTables.css" />
+  </head>
+
+  <body>
+    <%- include('sidebar.ejs') %>
+
+    <section class="home-section">
+      <div class="Container">
+        <div class="row">
+          <div class="Container px-3 py-1 contenedorventas">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <h2 class="centrado">Registro e historial de</h2>
+              <h2 class="centrado">compras</h2>
+            </div>
+          </div>
+
+          <div class="Container">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div class="row">
+                <div class="accordion accordion-flush py-0"id="accordionCompras">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button
+                        class="accordion-button collapsed contenedorventas"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseOne"
+                      >
+                        <h5>REGISTRAR UNA NUEVA COMPRA</h5>
+                      </button>
+                    </h2>
+
+                    <div id="flush-collapseOne"class="accordion-collapse collapse"data-bs-parent="#accordionFlushExample">
+                      <div class="accordion-body">
+                        <div class="Container"style="background-color: rgb(241, 238, 238)">
+                          <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                              <!-- Formulario para compra  -->
+                              <form class="center">
+                                <div class="row px-2" id="formularioCompra" style="display: block">
+                                  <div class="row g-3">
+
+                                    <!-- Proveedor -->
+                                    <div class="col">
+                                      <label for="btnBuscarProveedor" class="form-label fw-bold" >Buscar un Proveedor</label>
+                                      <div class="d-grid gap-2">
+                                        <input id="ProveedorCed" hidden>
+                                        <button class="btn btn-outline-success" type="button" id="btnBuscarProveedor" onclick="mostrarProveedorCompras()">Buscar   <i class='bx bx-search'></i></button>
+                                      </div>
+                                    </div>
+
+                                    <!-- Gerente -->
+                                    <div class="col">
+                                      <label for="btnBuscarGerente" class="form-label fw-bold" >Buscar un Comprador</label>
+                                      <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-success" type="button" id="btnBuscarGerente" onclick="mostrarGerenteCompras()">Buscar   <i class='bx bx-search'></i></button>
+                                        <input id="GerenteCed" hidden>
+                                      </div>
+                                    </div>
+
+                                    <!-- Fecha Compra -->
+                                    <div class="col">
+                                      <label for="FCompra" class="form-label fw-bold">Ingrese la fecha de compra</label>
+                                      <input disabled type="date"  class="form-control" id="FCompra" placeholder="Ingrese la fecha" required onchange="ActualizarFecha()">
+                                    </div>
+                                    
+                                    <!-- Productos -->
+                                    <div class="col py-4">
+                                      <a class="btn btn-success" title="Agregar Productos" onclick="AbrirPanelProductoCompra()" required>
+                                        <i class="fa-solid fa-cart-shopping mr-2"></i>Agregar Productos
+                                      </a>
+                                      <div class="invalid-feedback">Por favor agregue los Productos</div>
+                                    </div>
+                                    
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="Container py-4" id="facturacompra" style="display: block">
+                          <div class="row">
+                            <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
+                            </div>
+                            <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+
+                              <table class="table" id="tablacompra">
+                                <thead>
+                                  <tr>
+                                    <th id="NumCompra" class="centrado"></th>
+                                    <th class="centrado"></th>
+                                    <th></th>
+                                    <th class="centrado"></th>
+                                    <th class="centrado"></th>
+                                    <th class="centrado"></th>
+                                  </tr>
+                                  <tr>
+                                    <th class="centrado">Proveedor</th>
+                                    <th class="centrado">Comprador</th>
+                                    <th></th>
+                                    <th class="centrado">Fecha Venta</th>
+                                    <th></th>
+                                    <th></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td class="centrado" id="ProveedorFactura">
+                                    </td>
+                                    <td class="centrado" id="GerenteFactura">
+                                    </td>
+                                    <td></td>
+                                    <td class="centrado"  id="FechatablaCompra"></td>
+                                    <td></td>
+                                    <td></td>
+                                  </tr>
+                                  <thead>
+                                    <tr>
+                                      <th class="centrado">Producto</th>
+                                      <th class="centrado">Cantidad Producto</th>
+                                      <th class="centrado">Precio Venta</th>
+                                      <th class="centrado">Precio Compra</th>
+                                      <th class="centrado">Sub Total</th>
+                                      <th class="centrado"></th>
+                                    </tr>
+                                  </thead>
+                                </tbody>
+
+                                <thead>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <th class="centrado"></th>
+                                    <th class="centrado"></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="centrado">Total</th>
+                                  </tr>
+                                  <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="centrado" id="celda_totalCompra">C$ 0</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+
+                              <div class="centrado text-end" id="btnfactura">
+                                <button
+                                  class="btn btn-success"
+                                  onclick="AñadirCompra()"
+                                >
+                                  Guardar Compra
+                                </button>
+                              </div>
+                            </div>
+                            <div
+                              class="col-sm-12 col-md-1 col-lg-1 col-xl-1"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="CompraProducto"class="panel-flotante panel-ancho-Compras" style="display: none">
+                <div class="panel-content">
+                  <h4>Seleccione los productos</h4>
+                  <div style="max-height: 350px; overflow-y: auto">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1"></div>
+                      <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                        <div class="mb-3">
+                          <label for="text" class="form-label" >Seleccione la categoria del producto a añadir</label>
+                          <select class=" px-2 form-select" id="categoriaSelect1" onchange="mostrarTablaSegunCategoria()">
+                          <label for="Categoria" class="form-label" >Seleccione la categoria del producto que desea</label>
+                          <option selected>Seleccione una categoria</option>
+                          <option value="1">Calzado</option>
+                          <option value="2">Prendas de Vestir</option>
+                          <option value="3">Cosmeticos</option>
+                          <option value="4">Electrodomestico</option>
+                          <option value="5">Productos Plasticos</option>
+                        </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1"></div>
+
+                      <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1"></div>
+                      <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+
+                        <div id="tablaCalzado" style="display: none">
+                          <table class="table primary" id="TableCalzadoCompras">
+                            <thead>
+                              <tr>
+                                <th class="centrado">Marca</th>
+                                <th class="centrado">Nombre del producto</th>
+                                <th class="centrado">Color</th>
+                                <th class="centrado">Talla</th>
+                                <th class="centrado">Precio Actual de Venta</th>
+                                <th class="centrado">Precio Actual de Compra</th>
+                                <th class="centrado col-xl-1"></th>
+                              </tr>
+                              <tbody>
+                                <% productos.forEach((producto) => { %>
+                                  <% if( producto.Categoria == 'Calzado' ) { %>
+                                    <tr>
+                                      <td class="centrado"><%= producto.Marca %></td>
+                                      <td class="centrado">Calzado <%= producto.Tipo %> <%= producto.Modelo %></td>
+                                      <td class="centrado"><%= producto.Color %></td>
+                                      <td class="centrado"><%= producto.Talla %></td>
+                                      
+                                      <% if(producto.Precio_Venta == null){ %>
+                                        <td class="centrado">C$ 0 </td>
+                                      <% }else { %>
+                                        <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                      <% }%>
+                                      
+                                      <% if( producto.Precio_Compra == null){ %>
+                                        <td class="centrado">C$ 0 </td>
+                                      <% }else { %>
+                                        <td class="centrado">C$ <%= producto.Precio_Compra %></td>
+                                      <% }%>
+
+                                      <td class="centrado"></td>
+                                      <td class="centrado ">
+                                        <!-- Botones de acciones -->
+                                        <button type="button" onclick="AñadirProducto(`<%= producto.Id_Producto %>`,`Calzado <%= producto.Marca %>  <%= producto.Tipo %> <%= producto.Modelo %> Color <%= producto.Color %> Talla <%= producto.Talla %>`,`<%= producto.Precio_Compra %>`,`<%= producto.Precio_Venta %>`)" class="btn btn-success px-3" title="Añadir Producto"><i class="fa-solid fa-cart-plus"></i></button>
+                                      </td> 
+                                    </tr>
+                                  <% } %>
+                                <% }) %>
+
+                              </tbody>
+                            </thead>
+                          </table>
+                        </div>
+
+                        <div id="tablaPrendas" style="display: none">
+                          <table class="table primary" id="TablePvCompras">
+                            <thead>
+                              <tr>
+                                <th class="centrado">Nombre del producto</th>
+                                <th class="centrado">Marca</th>
+                                <th class="centrado">Color</th>
+                                <th class="centrado">Talla</th>
+                                <th class="centrado">Precio Actual de Venta</th>
+                                <th class="centrado">Precio Actual de Compra</th>
+                                <th class="centrado col-1"></th>
+                              </tr>
+                            </thead>
+                              <tbody>
+                                <% productos.forEach((producto) => { %>
+                                  <% if( producto.Categoria == 'Prendas de Vestir' ) { %>
+                                    <tr>
+                                      <td class="centrado"><%= producto.Tipo %> <%= producto.Modelo %></td>
+                                      <td class="centrado"><%= producto.Marca %></td>
+                                      <td class="centrado"><%= producto.Color %></td>
+                                      <td class="centrado"><%= producto.Talla %></td>
+                                      
+                                      <% if(producto.Precio_Venta == null){ %>
+                                        <td class="centrado">C$ 0 </td>
+                                      <% }else { %>
+                                        <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                      <% }%>
+                                      
+                                      <% if( producto.Precio_Compra == null){ %>
+                                        <td class="centrado">C$ 0 </td>
+                                      <% }else { %>
+                                        <td class="centrado">C$ <%= producto.Precio_Compra %></td>
+                                      <% }%>
+
+                                      <td class="row px-4 centrado">
+                                        <!-- Botones de acciones -->
+                                        <button type="button" class="btn btn-success px-3" title="Añadir Producto" onclick="AñadirProducto(`<%= producto.Id_Producto %>`,`<%= producto.Tipo %> <%= producto.Marca %> Color <%= producto.Color %> Talla <%= producto.Talla %>`,`<%= producto.Precio_Compra %>`, `<%= producto.Precio_Venta %>`)"><i class="fa-solid fa-cart-plus"></i></button>
+                                      </td> 
+                                    </tr>
+                                  <% } %>
+                                <% }) %>
+                              </tbody>
+                          </table>
+                        </div>
+
+                        <div id="tablaCosmeticos" style="display: none">
+                          <table class="table primary" id="TableCosmeticCompras">
+                            <thead>
+                              <tr>
+                                <th class="centrado">Nombre del producto</th>
+                                <th class="centrado">Marca</th>
+                                <th class="centrado">Color</th>
+                                <th class="centrado">Precio Actual de Venta</th>
+                                <th class="centrado">Precio Actual de Compra</th>
+                                <th class="centrado col-1"><!-- Acción --></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% productos.forEach((producto) => { %>
+                                <% if( producto.Categoria == 'Cosmeticos' ) { %>
+                                  <tr>
+                                    <td class="centrado"><%= producto.Clasificacion %> <%= producto.Tipo %></td>
+                                    <td class="centrado"><%= producto.Marca %></td>
+                                    <td class="centrado"><%= producto.Color %></td>
+
+                                    <% if(producto.Precio_Venta == null){ %>
+                                      <td class="centrado">C$ 0 </td>
+                                    <% }else { %>
+                                      <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                    <% }%>
+                                    
+                                    <% if( producto.Precio_Compra == null){ %>
+                                      <td class="centrado">C$ 0 </td>
+                                    <% }else { %>
+                                      <td class="centrado">C$ <%= producto.Precio_Compra %></td>
+                                    <% }%>
+
+                                    <td></td>
+                                    <td class="centrado">
+                                      <!-- Botones de acciones -->
+                                      <button type="button" class="btn btn-success px-3" title="Añadir Producto" onclick="AñadirProducto(`<%= producto.Id_Producto %>`,`<%= producto.Clasificacion %> <%= producto.Tipo %> <%= producto.Marca %> <%= producto.Color %>` ,`<%= producto.Precio_Compra %>`, `<%= producto.Precio_Venta%>`)" ><i class="fa-solid fa-cart-plus"></i></button>
+                                    </td> 
+                                  </tr>
+                                <% } %>
+                              <% }) %>
+                            </tbody>
+                          </table>
+                        </div>
+
+                        <div id="tablaElectrodomesticos" style="display: none">
+                          <table class="table primary" id="TableElectrodomesticosCompras">
+                            <thead>
+                              <tr>
+                                <th class="centrado">Nombre del producto</th>
+                                <th class="centrado">Marca</th>
+                                <th class="centrado">Modelo</th>
+                                <th class="centrado">Color</th>
+                                <th class="centrado">Precio Actual de Venta </th>
+                                <th class="centrado">Precio Actual de Compra</th>
+                                <th class="centrado col-1"><!-- Acción --></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% productos.forEach((producto) => { %>
+                                <% if( producto.Categoria == 'Electrodomesticos' ) { %>
+                                  <tr>
+                                    <td class="centrado"><%= producto.Tipo %></td>
+                                    <td class="centrado"><%= producto.Marca %></td>
+                                    <td class="centrado"><%= producto.Modelo %></td>
+                                    <td class="centrado"><%= producto.Color %></td> 
+
+                                    <% if(producto.Precio_Venta == null){ %>
+                                      <td class="centrado">C$ 0 </td>
+                                    <% }else { %>
+                                      <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                    <% }%>
+                                    
+                                    <% if( producto.Precio_Compra == null){ %>
+                                      <td class="centrado">C$ 0 </td>
+                                    <% }else { %>
+                                      <td class="centrado">C$ <%= producto.Precio_Compra %></td>
+                                    <% }%>
+
+                                    <td class="row px-4 centrado">
+                                      <!-- Botones de acciones -->
+                                      <button type="button" class="btn btn-success px-3" title="Añadir Producto" onclick="AñadirProducto(`<%= producto.Id_Producto %>`,`<%= producto.Tipo %> <%= producto.Marca %> <%= producto.Modelo %> Color <%= producto.Color %>`,`<%= producto.Precio_Compra %>`,`<%= producto.Precio_Venta %>`)" ><i class="fa-solid fa-cart-plus"></i></button>
+                                    </td> 
+                                  </tr>
+                                <% } %>
+                              <% }) %>
+                            </tbody>
+                          </table>
+                        </div>
+
+                        <div id="tablaPPlasticos" style="display: none">
+                          <table class="table primary" id="TablePPCompras">
+                            <thead>
+                              <tr>
+                                <th class="centrado">Nombre del producto</th>
+                                <th class="centrado">Marca</th>
+                                <th class="centrado">Color</th>
+                                <th class="centrado">Dimensiones</th>
+                                <th class="centrado">Precio de Venta</th>
+                                <th class="centrado">Precio de Compra</th>
+                                <th class="centrado"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% productos.forEach((producto) => { %>
+                                <% if( producto.Categoria == 'Productos Plasticos' ) { %>
+                                  <tr>
+                                    <td class="centrado"><%= producto.Tipo %></td>
+                                    <td class="centrado"><%= producto.Marca %></td>
+                                    <td class="centrado"><%= producto.Color %></td>
+                                    <td class="centrado"><%= producto.Dimensiones %> <%= producto.Unidad_Medida %></td>
+                                    <% if(producto.Precio_Venta == null){ %>
+                                      <td class="centrado">C$ 0 </td>
+                                    <% }else { %>
+                                      <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                    <% }%>
+                                    
+                                    <% if( producto.Precio_Compra == null){ %>
+                                      <td class="centrado">C$ 0 </td>
+                                    <% }else { %>
+                                      <td class="centrado">C$ <%= producto.Precio_Compra %></td>
+                                    <% }%>
+
+                                    <td class="row px-4 centrado">
+                                      <!-- Botones de acciones -->
+                                      <button type="button" class="btn btn-success px-3" title="Añadir Producto" onclick="AñadirProducto(`<%= producto.Id_Producto %>`,`<%= producto.Tipo %> <%= producto.Marca %> Color <%= producto.Color %>`,`<%= producto.Precio_Compra %>`, `<%= producto.Precio_Venta %>`)" ><i class="fa-solid fa-cart-plus"></i></button>
+                                    </td>
+                                <% } %>
+                              <% }) %>
+                            </tbody>
+                          </table>
+                        </div>
+                        
+                      </div>
+                      <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1"></div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="btn btn-danger px-2 py-2"
+                    onclick="CerrarPanelProductoCompra()"
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+              
+            </div>
+
+            <div class="py-1 px-3 mb-2" style="display: flex; align-items: center; justify-content: space-between;">
+              <h4 style="color: black; font-size: 22px">Listado de compras</h4>
+
+              <% if( UserRol == 'Gerente') { %>
+                <a class="btn btn-primary" onclick="abrirPanelReportes()">Generar Reporte de Compras</a> 
+              <% } %>
+              
+
+              <div style="display: flex; align-items: center">
+                <!-- <button type="button" class="btn btn-success" title="Abonar" style="margin-left: 10px" onclick="mostrarPanelHistorialAbonos()"><i class="fa-solid fa-list"></i>Listar historial de abonos</button>-->
+              </div>
+            </div>
+
+            <div class="Container">
+              <div class="row">
+                <div>
+
+                  <table class="table primary px-3 hover" id="TableCompras">
+                    <thead>
+                      <tr>
+                        <th class="centrado">Comercio</th>
+                        <th class="centrado">Nombre del Proveedor</th>
+                        <th class="centrado">Comprador</th>
+                        <th class="centrado">Fecha de compra</th>
+                        <th class="centrado">Cantidad total</th>
+                        <th class="centrado"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% compras.forEach((C) => { %>
+                      <tr>
+                        <td class="centrado"><%= C.Comercio %></td>
+                        <td class="centrado"><%= C.Proveedor %></td>
+                        <td class="centrado"><%= C.Comprador %></td>
+                        <td class="centrado"><%= C.Fecha_Compra %></td>
+                        <td class="centrado">C$ <%= C.Total_Compra %></td>
+                        <td class="centrado">
+                          <button type="button" class="btn btn-success info-venta" title="Informacion de la venta" onclick="mostrarDetallesCompra('<%= C.Id_Compra %>','<%= C.Proveedor %>','<%= C.Comprador %>','<%= C.Fecha_Compra %>','<%= C.Total_Compra %>','<%= C.Comercio %>')"> <i class="fa-solid fa-money-check-dollar"></i> </button>
+                        </td>
+                      </tr>
+                      <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div id="panelDetalleCompras" class="panel-flotante panel-ancho" style="display: none">
+              <div class="panel-content">
+                <h4 class="fw-bold my-2" id="DetalleCompraTitle">Detalle Compra</h4>
+                <div style="max-height: 300px; overflow-y: auto">
+                  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <div style="max-height: 300px; overflow-y: auto">
+                        <button type="button" class="btn btn-outline-primary mt-2 mb-4" onclick="genPDF()">
+                          Generar Pdf <i class="fas fa-file-pdf mx-1"></i>
+                        </button>
+                        <table class="table" id="tablaDetalleCompra">
+                          <thead>
+                            <tr>
+                              <th class="centrado">Proveedor</th>
+                              <th class="centrado">Comprador</th>
+                              <th></th>
+                              <th class="centrado">Fecha</th>
+                              <th class="centrado"></th>
+                              <th class="centrado"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td class="" id="ProveedorDetalle"></td>
+                              <td class="centrado" id="CompradorDetalle"></td>
+                              <td></td>
+                              <td class="centrado" id="FechaCompraDetalle"></td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <thead>
+                              <tr>
+                                <th class="centrado">Producto</th>
+                                <th class="centrado">Cantidad Adquirida</th>
+                                <th class="centrado"></th>
+                                <th class="centrado">Precio Compra</th>
+                                <th class="centrado">Precio Venta</th>
+                                <th class="centrado">Sub Total</th>
+                              </tr>
+                            </thead>
+                          </tbody>
+                          <!-- //Productos -->
+                          <tbody>
+                          </tbody>
+                          <thead>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Total</th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td class="centrado" id="TotalCompraDetalle"></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <button type="button" class="btn btn-danger" onclick="cerrarDetallesCompra()">Cerrar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="BuscarProveedorVenta"class="panel-flotante panel-ancho"style="display: none">
+              <div class="panel-content">
+                <h4 id="Title_Compras">Buscar un proveedor</h4>
+                <div style="max-height: 300px; overflow-y: auto">
+                  <a type="button" href="/Proveedores" class="btn btn-success px-3 mt-2 mb-3" title="Agregar Nuevo Proveedor">
+                    Agregar un nuevo Proveedor <i class="fa-solid fa-user-plus mx-1"></i>
+                  </a>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <table class="table primary">
+                        <thead>
+                          <tr>
+                            <th class="centrado">Comercio</th>
+                            <th class="centrado">Proveedor</th>
+                            <th class="centrado"></th>
+                          </tr>
+                          <tbody>
+                            <% proveedores.forEach((P) => { %>
+                            <tr>
+                              <td class="centrado"><%= P.Comercio %></td>
+                              <td class="centrado"><%= P.Nombre %></td>
+                              <td class="centrado">
+                                <button type="button" class="btn btn-success px-3" title="Añadir" onclick="BuscarProveedor('<%= P.Cedula %>')">
+                                  <i class="fa-solid fa-user-plus mx-1"></i>
+                                </button>
+                              </td>
+                            </tr>
+                            <% }) %>
+                          </tbody>
+                        </thead>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-danger" onclick="cerrarProveedorCompras()">Cancelar</button>
+              </div>
+            </div>
+            
+            <div id="BuscarGerenteVenta" class="panel-flotante panel-ancho" style="display: none">
+              <div class="panel-content">
+                <h4 id="Title_Gerente">Buscar un Comprador</h4>
+                <div style="max-height: 300px; overflow-y: auto">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <table class="table primary">
+                        <thead>
+                          <tr>
+                            <th class="centrado">Comprador</th>
+                            <th class="centrado"></th>
+                          </tr>
+                          <tbody>
+                            <% gerentes.forEach((G) => { %>
+                            <tr>
+                              <td class="centrado"><%= G.Nombre %> <%= G.Apellido %></td>
+                              <td class="centrado">
+                                <button type="button" class="btn btn-success px-3" title="Añadir" onclick="BuscarGerente('<%= G.Cedula %>')">
+                                  <i class="fa-solid fa-user-plus mx-1"></i>
+                                </button>
+                              </td>
+                            </tr>
+                            <% }) %>
+                          </tbody>
+                        </thead>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-danger" onclick="cerrarGerenteCompras()">Cancelar</button>
+              </div>
+            </div>
+            
+
+            <div id="PanelReportes"class="panel-flotante panel-ancho"style="display: none">
+              <div class="panel-content">
+                <h3>Generar Reporte de Compras</h3>
+                <div class="container my-2">
+                  <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title">Seleccione el periodo de tiempo para el reporte</h5>
+                          <form id="report-form" action="/ReporteCompras" method="post">
+                              <div class="form-group">
+                                  <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="period" id="mes" value="mes">
+                                      <label class="form-check-label" for="mes">Mes</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="period" id="semana" value="semana">
+                                      <label class="form-check-label" for="semana">Semana</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="period" id="quincena" value="quincena">
+                                      <label class="form-check-label" for="quincena">Quincena</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="period" id="rango-fechas" value="rango">
+                                      <label class="form-check-label" for="rango-fechas">Rango de Fechas</label>
+                                  </div>
+                              </div>
+                              <div class="form-group" id="select-mes" style="display: none;">
+                                  <label for="mes-select">Seleccione el mes</label>
+                                  <select class="form-control" id="mes-select" name="mes-select">
+                                      <!-- Opciones se agregarán dinámicamente -->
+                                  </select>
+                              </div>
+                              <div class="form-group" id="rango-fechas-inputs" style="display: none;">
+                                  <label for="fecha_inicio">Fecha de inicio</label>
+                                  <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio">
+                                  <label for="fecha_fin" class="mt-2">Fecha de fin</label>
+                                  <input type="date" class="form-control" id="fecha_fin" name="fecha_fin">
+                              </div>
+                              <div class="mt-3">
+                                <button type="submit" class="btn btn-info"><i class="fa-solid fa-file-pdf"></i> Generar Reporte</button>
+                                <button type="button" class="btn btn-danger" onclick="cerrarPanelReportes()"><i class="fa-solid fa-xmark"></i> Cancelar </button>
+                              </div>
+                              
+                          </form>
+                      </div>
+                  </div>
+                </div>
+                
+                
+              </div>
+            </div> 
+
+        
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" ></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap5.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
+
+    <!--  <% if (typeof alert != "undefined") { %>
+      <script>
+        Swal.fire({
+          title: "<%= alertTitle %>",
+          text: "<%= alertMessage %>",
+          icon: "<%= alertIcon %>",
+          showConfirmButton: true,
+          timer: false,
+        }).then(() => {
+          window.location = "/<%= ruta %>";
+        });
+      </script>
+    <% } %> -->
+
+    <script src="/resources/js/script.js"></script>
+    <script src="/resources/js/ScriptCompras.js"></script>
+    
+<!-- 
+    <script>
+      $(document).ready(function () {
+        $("#TableVentas").DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5, 10, 15, 20, 25, 50],
+          oLanguage: {
+            sSearch: "Buscar una Venta:",
+            sZeroRecords: "No se encontraron resultados",
+            sLengthMenu: "Mostrar  _MENU_  Ventas",
+            sZeroRecords: "No se encontraron resultados",
+            sLoadingRecords: "Cargando...",
+            oPaginate: {
+              sFirst: "Primero",
+              sLast: "Último",
+              sNext: "Siguiente",
+              sPrevious: "Anterior",
+            },
+          },
+        });
+      });
+    </script> -->
+
+    <script>
+      $(document).ready(function()
+      {
+        $('#TableCalzadoCompras').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Producto:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Productos",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+      });
+        
+      $(document).ready(function(){
+        $('#TablePvCompras').DataTable({
+            info: false,
+            ordering: false,
+            lengthMenu: [5,10,15,20,25,50],
+            "oLanguage": {
+              "sSearch": "Buscar un Producto:",
+              "sZeroRecords": "No se encontraron resultados",
+              "sLengthMenu": "Mostrar  _MENU_  Productos",
+              "sZeroRecords": "No se encontraron resultados",
+              "sLoadingRecords": "Cargando...",
+              "oPaginate": {
+                  "sFirst": "Primero",
+                  "sLast": "Último",
+                  "sNext": "Siguiente",
+                  "sPrevious": "Anterior"}
+              }
+          });
+        });
+      
+      $(document).ready(function(){
+          
+        $('#TableCosmeticCompras').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Producto:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Productos",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+    });
+
+      $(document).ready(function(){
+          
+        $('#TableElectrodomesticosCompras').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Producto:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Productos",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+    });
+
+      $(document).ready(function(){
+          
+        $('#TablePPCompras').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Producto:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Productos",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+    });
+
+      $(document).ready(function(){
+        
+      $('#TableCompras').DataTable({
+        info: false,
+        ordering: false,
+        lengthMenu: [5,10,15,20,25,50],
+        "oLanguage": {
+          "sSearch": "Buscar una Compra:",
+          "sZeroRecords": "No se encontraron resultados",
+          "sLengthMenu": "Mostrar  _MENU_  Compras",
+          "sZeroRecords": "No se encontraron resultados",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+              "sFirst": "Primero",
+              "sLast": "Último",
+              "sNext": "Siguiente",
+              "sPrevious": "Anterior"}
+          }
+      });
+  });
+    
+      $(document).ready(function(){
+            
+        $('#TableClientsVenta').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Cliente:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Clientes",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+    });
+      
+      $(document).ready(function(){
+        
+      $('#TableVendedoresVenta').DataTable({
+        info: false,
+        ordering: false,
+        lengthMenu: [5,10,15,20,25,50],
+        "oLanguage": {
+          "sSearch": "Buscar un Vendedor:",
+          "sZeroRecords": "No se encontraron resultados",
+          "sLengthMenu": "Mostrar  _MENU_  Vendedores",
+          "sZeroRecords": "No se encontraron resultados",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+              "sFirst": "Primero",
+              "sLast": "Último",
+              "sNext": "Siguiente",
+              "sPrevious": "Anterior"}
+          }
+      });
+  });
+    
+    </script> 
+    
+
+  </body>
+</html>

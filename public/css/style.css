@@ -1,0 +1,617 @@
+ /* Google Font Link (tipo de letra)*/
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+ 
+ *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins" , sans-serif;
+}
+
+body{
+    background-color: rgb(238, 236, 236);
+    margin: auto;
+    text-align: center;
+}
+
+
+  @media (min-width: 991.98px) {
+  main {
+  padding-left: 240px;
+  }
+}
+
+.container-login{
+  background-color: rgba(255, 255, 255, 0.87);
+  margin: auto;
+  margin-top: 40px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  width: 500px;
+  border-radius: 20px;
+}
+
+.img-logo{
+  width: 200px;
+  height: 160px;
+}
+
+.login-form , .contenedor{
+  background-color: rgba(255, 255, 255, 0.87);
+  width: 300px;
+  margin: 0 auto;
+
+}
+
+.login-form h1{
+    text-align: center;
+    color: #078694;
+    font-size: 28px;
+}
+
+
+.login-form input[type="password"],
+.login-form input[type="text"] {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #acacac;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  box-sizing:border-box;
+  border-radius: 10px;
+}
+
+/* Estilos boton LOGIN*/
+.btn-login{
+    width: 100%;
+    padding: 15px;
+    background-color: #0396A6;
+    border: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: large;
+    color: #ffffff;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.btn-login:hover,.btn-login:active{
+    color:#fff;
+    background-color:#03A6A6;
+    border-color:#03A6A6;
+  }
+
+  /* Estilos boton REGISTER*/
+.btn-register{
+  width: 100%;
+  padding: 15px;
+  background-color: #F2AA52;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: large;
+  color: #ffffff;
+  margin-top: 10px;
+  /* Para dar la apariencia de un boton */
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  text-decoration: none;  
+  border-radius: 10px;
+}
+.btn-register:hover,.btn-register:active{
+  color:#fff;
+  background-color: #F2BE5C;
+  border-color:#F2BE5C
+;
+}
+.btn-register:focus{
+  box-shadow:0 0 0 3px #F2BE5C;
+}
+
+
+/* Estilos de link para ir a LOGIN*/
+.a-login:link, .a-login:visited {
+  background-color: white;
+  color: black;
+  border: 2px solid #10B981;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.a-login:hover, .a-login:active {
+  background-color: #10B981;
+  color: white;
+}
+
+/* Estilos de link para realizar el LOGOUT*/
+.a-logout:link, .a-logout:visited {
+  background-color: white;
+  color: black;
+  border: 2px solid #F87171;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.a-logout:hover, .a-logout:active {
+  background-color: #F87171;
+  color: white;
+}
+
+/* Estilos boton CANCELAR*/
+.btn-cancel{
+  width: 49%;
+  padding: 15px;
+  background-color: #ff3b3b;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  font-size:medium;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 20px;
+  margin-right: 4px;
+  /* Para dar la apariencia de un boton */
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  text-decoration: none;  
+  border-radius: 10px;
+}
+.btn-cancel:hover,.btn-cancel:active{
+  color:#fff;
+  background-color: #ff5555;
+  border-color:#ff5555;   
+;
+}
+.btn-cancel:focus{
+  box-shadow:0 0 0 3px #6B7280;
+}
+
+/* Estilos boton GUARDAR*/
+.btn-save{
+  width: 49%;
+  padding: 15px;
+  background-color: #00ff40;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  font-size:medium;
+  color: #ffffff;
+  margin-top: 20px;
+  margin-left: 4px;
+  /* Para dar la apariencia de un boton */
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  text-decoration: none;  
+  border-radius: 10px;
+}
+.btn-save:hover,.btn-save:active{
+  color:#fff;
+  background-color: #2dff62;
+  border-color:#2dff62;
+}
+.btn-save:focus{
+  box-shadow:0 0 0 3px #1E3A8A;
+}
+
+/* form User Registration */
+
+.body-register{
+  background-color: #004b7a;
+  font-family:'Times New Roman', Times, serif ;
+  margin: auto;
+  text-align: center;
+}
+
+.register-form{
+  width: 450px;
+  margin: 0 auto;
+  padding: 0px 20px 60px 20px;
+  margin-top: 30px;
+  font-family: roboto;
+  text-align: left !important;
+  background-color: #F2F2F2;
+ box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22); 
+ border-radius: 20px;
+}
+
+.register-form h1 {
+  text-align: center;
+  color:#004b7a ;
+  font-size: 22px;
+  padding: 20px 0 15px 0;
+}
+
+
+/* Estilos para el select dropdown */
+.select-css {
+  display: block;
+  font-size: 16px;  
+  font-weight: 400;  
+  line-height: 1.3;
+  padding: .4em 1.4em .3em .8em;
+  width: 400px;
+  height: 40px;
+  max-width: 100%; 
+  box-sizing: border-box;
+  margin: 0;  
+  background-color: #f3f3f3;  
+  border-radius: 10px;
+ }
+ .select-css::-ms-expand {
+  display: none;
+ }
+ .select-css:hover {
+  border-color: #888;
+ }
+ .select-css:focus {
+  border-color: #aaa;
+  box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+  box-shadow: 0 0 0 3px -moz-mac-focusring;
+  color: #222; 
+  outline: none;
+ }
+ .select-css option {
+  font-weight:normal;
+ }
+
+ /*SIDEBAR*/
+
+.sidebar{
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 96px;
+  background: #121029;
+  padding: 6px 14px;
+  z-index: 99;
+  transition: all 0.5s ease;
+  
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #1d1b31;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #575757;
+} 
+
+.sidebar.open{
+  width: 250px;
+}
+.sidebar .logo-details{
+  height: 60px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.sidebar .logo-details .icon{
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+.sidebar .logo-details .logo_name{
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+.sidebar.open .logo-details .icon,
+.sidebar.open .logo-details .logo_name{
+  opacity: 1;
+}
+.sidebar .logo-details #btn{
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  font-size: 22px;
+  transition: all 0.4s ease;
+  font-size: 23px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+.sidebar.open .logo-details #btn{
+  text-align: right;
+}
+.sidebar i{
+  color: #fff;
+  height: 60px;
+  min-width: 50px;
+  font-size: 28px;
+  text-align: center;
+  line-height: 60px;
+  margin-left: -23px; 
+  padding-left: 2px;
+}
+.sidebar .nav-list{
+  margin-top: 20px;
+  height: 100%;
+}
+.sidebar li{
+  position: relative;
+  margin: 8px 0;
+  list-style: none;
+}
+.sidebar li .tooltip{
+  position: absolute;
+  top: -20px;
+  left: calc(100% + 15px);
+  z-index: 3;
+  background: #fff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 400;
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: 0s;
+  overflow: visible; /* Asegurar que los tooltips sean visibles */
+}
+.sidebar li:hover .tooltip{
+  opacity: 1;
+  pointer-events: auto;
+  transition: all 0.4s ease;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.sidebar.open li .tooltip{
+  display: none;
+}
+.sidebar input{
+  font-size: 15px;
+  color: #FFF;
+  font-weight: 400;
+  outline: none;
+  height: 50px;
+  width: 100%;
+  width: 50px;
+  border: none;
+  border-radius: 12px;
+  transition: all 0.5s ease;
+  background: #1d1b31;
+}
+.sidebar.open input{
+  padding: 0 20px 0 50px;
+  width: 100%;
+}
+.sidebar .bx-search{
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  font-size: 22px;
+  background: #1d1b31;
+  color: #FFF;
+}
+.sidebar.open .bx-search:hover{
+  background: #1d1b31;
+  color: #FFF;
+}
+.sidebar .bx-search:hover{
+  background: #FFF;
+  color: #11101d;
+}
+.sidebar li a{
+  display: flex;
+  height: 100%;
+  width: 100%;
+  border-radius: 12px;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  background: #121029;
+}
+.sidebar li a:hover{
+  background: #FFF;
+  padding-left: 12px;
+}
+.sidebar li a .links_name{
+  color: #fff;
+  font-size: 15px;
+  font-weight: 400;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.4s;
+}
+.sidebar.open li a .links_name{
+  opacity: 1;
+  pointer-events: auto;
+}
+.sidebar li a:hover .links_name,
+.sidebar li a:hover i{
+  transition: all 0.5s ease;
+  color: #11101D;
+}
+.sidebar li i{
+  height: 50px;
+  line-height: 50px;
+  font-size: 18px;
+  border-radius: 12px;
+}
+.sidebar li.profile{
+  position: fixed;
+  height: 60px;
+  width: 78px;
+  left: 0;
+  bottom: -8px;
+  padding: 10px 14px;
+  background: #1d1b31;
+  transition: all 0.5s ease;
+  overflow: hidden;
+}
+.sidebar.open li.profile{
+  width: 250px;
+}
+.sidebar li .profile-details{
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.sidebar li img{
+  height: 45px;
+  width: 45px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 10px;
+}
+.sidebar li.profile .name,
+.sidebar li.profile .job{
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+  white-space: nowrap;
+}
+.sidebar li.profile .job{
+  font-size: 12px;
+}
+
+
+.sidebar .profile #log_out{
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background: #1d1b31;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 0px;
+  transition: all 0.5s ease;
+}
+.sidebar.open .profile #log_out{
+  width: 50px;
+  background: none;
+}
+.home-section{
+  position: relative;
+  background: #E4E9F7;
+  min-height: 100vh;
+  top: 0;
+  left: 96px;
+  width: calc(100% - 96px);
+  transition: all 0.5s ease;
+  z-index: 2;
+}
+.sidebar.open ~ .home-section{
+  left: 250px;
+  width: calc(100% - 250px);
+}
+.home-section .text{
+  display: inline-block;
+  color: #11101d;
+  font-size: 25px;
+  font-weight: 500;
+  margin: 18px
+}
+
+.cliente-section{
+  position: relative;
+  background: #E4E9F7;
+  min-height: 100vh;
+  top: 0;
+  left: 96px;
+  width: calc(100% - 96px);
+  transition: all 0.5s ease;
+  z-index: 2;
+}
+.sidebar.open ~ .cliente-section{
+  left: 250px;
+  width: calc(100% - 250px);
+}
+.cliente-section .text{
+  display: inline-block;
+  color: #11101d;
+  font-size: 25px;
+  font-weight: 500;
+  margin: 18px
+}
+@media (max-width: 420px) {
+  .sidebar li .tooltip{
+    display: none;
+  }
+}
+
+.centrado{
+  text-align: center;
+  vertical-align: middle;
+}
+
+.btn-margin {
+  margin-right: 10px; /* Ajusta según la separación deseada */
+}
+/*color del chunche de arriba*/
+.contenedorventas{
+  color: white;
+  background-color: #121029;
+}
+
+/*Panel de abonos*/
+.panel-flotante {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Asegura que esté encima de otros elementos */
+}
+
+
+.panel-ancho {
+  max-width: 650px; /*ajustar este valor según varia dog*/
+  width: 150%;
+  margin: 0 auto; /* Esto centra el panel horizontalmente en la página */
+}
+
+.panelBusqueda-ancho {
+  max-width: 770px; /*ajustar este valor según varia dog*/
+  width: 150%;
+  margin: 0 auto; /* Esto centra el panel horizontalmente en la página */
+}
+
+table.dataTable {
+  margin-top:10px !important;  
+  margin-bottom:8px !important;  
+  vertical-align: middle;
+  text-align: center;
+
+}
+
+table#TableClients th{ text-align: center; }
+
+table#TableReturnProducts {
+  margin: auto;
+  width: 80% !important; 
+}
+
+th.dt-center, td.dt-center { text-align: center; }
+
+.panel-ancho-Compras  {
+  max-width: 850px; /*ajustar este valor según varia dog*/
+  width: 150%;
+  margin: 0 auto; /* Esto centra el panel horizontalmente en la página */
+}
+

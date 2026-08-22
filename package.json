@@ -1,0 +1,45 @@
+{
+  "name": "sistema-almacen-jenny",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test jest",
+    "start": "node server/src/index.js",
+    "start:api": "node server/src/index.js",
+    "dev:api": "nodemon server/src/index.js",
+    "dev": "concurrently \"npm run dev:api\" \"npm --prefix client run dev\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@playwright/test": "^1.52.0",
+    "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.14.1",
+    "mysqldump": "^3.2.0",
+    "nodemon": "^3.1.0",
+    "path": "^0.12.7",
+    "pdfkit": "^0.15.0",
+    "pdfkit-table": "^0.1.99",
+    "pdfmake": "^0.2.10"
+    ,"cors": "^2.8.5"
+    ,"pg": "^8.13.1"
+    ,"concurrently": "^9.1.2"
+  },
+  "description": "",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "supertest": "^7.1.0"
+  }
+}

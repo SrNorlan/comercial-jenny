@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar datos del Cliente</title>
+    <!-- FA pencil-->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <!-- Bootstrao-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"rel="stylesheet"integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"crossorigin="anonymous"/>
+    <!-- Boxicons -->
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"rel="stylesheet"/>
+    <!--Estilo CSS-->
+    <link rel="stylesheet" href="resources/css/style.css" />
+    <link rel="shortcut icon" href="/resources/images/favicon.ico">
+  </head>
+  <body>
+    <%- include('sidebar.ejs') %> 
+
+    <section class="home-section">
+      <div class="Container px-3">
+        <div class="row">
+          <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <h3>Datos del <%= tipo %></h3>
+                    <form action="/UpdateClient" method="post" class="needs-validation" novalidate autocomplete="off">
+                        <!-- Nombres -->
+                        <div class="mt-3 mb-2">
+                          <label for="Nombre" class="form-label fw-bold">Nombres del Cliente</label>
+                          <input type="text" class="form-control" id="Id_cl" name="Id_cl" value="<%= cliente.Id_Persona %>" hidden>
+                          <input type="text" class="form-control" id="Tipo" name="tipo_edit" placeholder="Tipo" value="<%= tipo %>" hidden/>
+                          <input type="text" class="form-control" id="Nombre" name="Nombre_cl" placeholder="Nombres del Cliente" value="<%= cliente.Nombre %>" required/>
+                          <div class="invalid-feedback">Por favor ingrese los Nombres del Cliente</div>
+                        </div>
+
+                        <!-- Apellidos -->
+                        <div class="mb-2">
+                          <label for="Apellido" class="form-label fw-bold">Apellidos del cliente</label>
+                          <input type="text" class="form-control" id="Apellido" name="Apellido_cl" placeholder="Apellidos del cliente" value="<%= cliente.Apellido %>" required/>
+                          <div class="invalid-feedback">Por favor ingrese los Apellidos del Cliente</div>
+                        </div>
+
+                        <!-- Telefono -->
+                        <div class="mb-2">
+                          <label for="Telefono" class="form-label fw-bold">Teléfono  del cliente</label>
+                          <input type="number" class="form-control" id="Telefono" name="Telefono_cl" placeholder="Teléfono del cliente" value="<%= cliente.Telefono %>" required/>
+                          <div class="invalid-feedback">Por favor ingrese el numero de teléfono de 8 dígitos</div>
+                        </div>
+
+                        <!-- Cedula -->
+                        <div class="mb-2">
+                          <label for="Cedula" class="form-label  fw-bold">Cédula  del cliente</label>
+                          <input type="text" class="form-control" id="Cedula" name="Cedula_cl" placeholder="Cédula del cliente" value="<%= cliente.Cedula %>"  required/>
+                          <div class="invalid-feedback">Por favor ingrese el número de cédula del cliente</div>
+                        </div>
+
+                        <% if(tipo == 'Proveedor'){ %>
+                            <!-- Comercio -->
+                          <div class="mb-2">
+                            <label for="Comercio" class="form-label  fw-bold">Comercio</label>
+                            <input type="text" class="form-control" id="Comercio" name="Comercio_pv" placeholder="Cédula del cliente" value="<%= cliente.Comercio %>"  required/>
+                            <div class="invalid-feedback">Por favor ingrese el Comercio del Proveedor</div>
+                          </div>
+                        <% } %>
+
+
+
+                        <!-- Direccion -->
+                        <div class="mb-1 position-relative">
+                          <h5 class="my-3 fw-bold">Dirección del Cliente</h5>
+                          <label for="Distrito_cl" class="form-label fw-bold">Seleccione el Distrito</label>
+                          <select id="Distrito" name="Distrito_cl" class="form-select mb-2 position-relative" aria-label="Distrito" required>
+                            <option selected disabled value="">Seleccione el  Distrito... </option>
+                            <% if (cliente.Distrito == 'I') { %>
+                              <option value="I" selected>Distrito I</option>
+                            <% } else { %> <option value="I">Distrito I</option> <% } %> 
+                    
+                            <% if (cliente.Distrito == 'II') { %>
+                              <option value="II" selected>Distrito II</option>
+                            <% } else { %> <option value="II">Distrito II</option><% } %> 
+                    
+                            <% if (cliente.Distrito == 'III') { %>
+                              <option value="III" selected>Distrito III</option>
+                            <% } else { %> <option value="III">Distrito III</option> <% } %> 
+                            
+                            <% if (cliente.Distrito == 'IV') { %>
+                              <option value="IV" selected>Distrito IV</option>
+                            <% } else { %> <option value="IV">Distrito IV</option> <% } %> 
+                    
+                            <% if (cliente.Distrito == 'V') { %>
+                              <option value="V" selected>Distrito V</option>
+                            <% } else { %> <option value="V">Distrito V</option> <% } %> 
+                    
+                            <% if (cliente.Distrito == 'VI') { %>
+                              <option value="VI" selected>Distrito VI</option>
+                            <% } else { %> <option value="VI">Distrito VI</option> <% } %>  
+                    
+                            <% if (cliente.Distrito == 'VII') { %>
+                              <option value="VII" selected>Distrito VII</option>
+                            <% } else { %> <option value="VII">Distrito VII</option> <% } %>  
+                            
+                          </select>
+                          <div class="invalid-feedback">Por favor ingrese el Distrito</div>
+                        </div>
+
+                        <!-- Zona de Residencia -->
+                        <div class="mb-2">
+                          <label for="Residencia" class="form-label fw-bold">Zona de Residencia</label>
+                          <input type="text" class="form-control" id="Residencia" name="Residencia_cl" placeholder="Zona de Residencia" value="<%= cliente.Zona_Residencia %>" required />
+                          <div class="invalid-feedback">Por favor ingrese la Zona de Residencia</div>
+                        </div>
+
+                        <!-- P. Referencia -->
+                        <div class="mb-2">
+                          <label for="PuntoReferencia" class="form-label  fw-bold">Punto de Referencia</label>
+                          <input type="text" class="form-control" id="PuntoReferencia" name="PuntoReferencia_cl" placeholder="Punto de Referencia" value="<%= cliente.Punto_Referencia %>" required/>
+                          <div class="invalid-feedback">Por favor ingrese el Punto de Referencia</div>
+                        </div>
+
+                        <!-- Distancia -->
+                        <div class="mb-2">
+                          <label for="Distancia" class="form-label fw-bold">Distancia</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="Distancia"
+                            name="Distancia_cl"
+                            placeholder="Distancia"
+                            value="<%= cliente.Distancia %>"
+                          />
+                        </div>
+
+                        <!-- Casa -->
+                        <div class="mb-2">
+                          <label for="Casa" class="form-label fw-bold"
+                            >Información de la casa</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="Casa"
+                            name="Casa_cl"
+                            placeholder="N. Casa y/o color"
+                            required
+                            value="<%= cliente.Casa %>"
+                          />
+                          <div class="invalid-feedback">Por favor ingrese la información de la casa</div>
+                        </div>
+
+                        <script>
+                          // Validación de texto para los inputs de texto
+                          const inputLetra = document.querySelectorAll('input[type="text"]');
+                          const inputnumero = document.querySelectorAll('input[type="number"]');
+                  
+                          // Recorre cada input encontrado
+                          inputLetra.forEach(input => {
+                            // Agrega un evento "keypress" a cada input
+                            input.addEventListener("keypress", (e) => {
+                              let expre;
+                  
+                            // Verifica si el input es para la cédula
+                            if (input.id === 'Cedula') { // Supongamos que el input de la cédula tiene el ID 'cedulaInput'
+                                // Expresión regular para permitir números y guion "-"
+                                expre = /^[a-zA-Z0-9-]+$/; // Solo números del 0-9 y guion "-"
+                            }else
+                            if (input.id === 'Residencia' || input.id === 'PuntoReferencia' || input.id === 'Distancia' || input.id === 'Casa') { // Supongamos que el input de la cédula tiene el ID 'cedulaInput'
+                                // Expresión regular para permitir números y guion "-"
+                                expre = /^[a-zA-Z0-9\sñÑ]+$/; // Solo números del 0-9 y guion "-"
+                            }else{ 
+                                expre = /^[a-zA-Z\sñÑáéíóúÁÉÍÓÚÜü]+$/; 
+                              } 
+                              // Verifica si la tecla presionada cumple con la expresión regular
+                              if (!expre.test(e.key)) {
+                                  e.preventDefault(); // Evita que se ingrese la tecla en el input
+                              }
+                            });
+                          });
+                          inputnumero.forEach(input => {
+                            // Agrega un evento "keypress" a cada input
+                            input.addEventListener("keypress", (e) => {
+                              let expre;
+                  
+                              expre = /^[0-9]+$/; // Solo números del 0-9
+                              
+                              // Verifica si la tecla presionada cumple con la expresión regular
+                              if (!expre.test(e.key)) {
+                                  e.preventDefault(); // Evita que se ingrese la tecla en el input
+                              }
+                            });
+                          });
+                        </script>
+
+
+
+
+
+
+                      
+
+
+                        <div class="d-grid gap-2 mb-5">
+                          <button type="submit" class="btn btn-success" title="Editar">Editar</button>
+                        </div>
+                      
+                    </form>
+          </div>
+
+          <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                  <h2>Información del <%= tipo %></h2>
+                  <table class="table primary">
+                      <thead>
+                        <tr>
+                          <th class="centrado">Nombre completo</th>
+                          <th class="centrado">Cedula</th>
+                          <th class="centrado">Telefono</th>
+                          <th class="centrado">Dirección</th>
+
+                          <% if(tipo == 'Cliente'){ %>
+                            <th class="centrado">Credito Disponible</th>
+                          <% } %>
+
+                          <% if(tipo == 'Proveedor'){ %>
+                            <th class="centrado">Comercio</th>
+                          <% } %>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td class="centrado"> <%= cliente.Nombre %> <%= cliente.Apellido %></td>
+                        <td class="centrado"><%= cliente.Cedula %></td>
+                        <td class="centrado"><%= cliente.Telefono %></td>
+                        <td class="centrado">Distrito <%= cliente.Distrito %>,<%= cliente.Zona_Residencia %>,<%= cliente.Punto_Referencia %> <%= cliente.Distancia %>, <%= cliente.Casa %></td>
+                        <% if(tipo == 'Cliente'){ %>
+                          <td class="centrado">C$ <%= cliente.Credito_Disponible %></td>
+                        <% } %>
+
+                        <% if(tipo == 'Proveedor'){ %>
+                          <td class="centrado"><%= cliente.Comercio %></td>
+                        <% } %>
+                        
+                      </tbody>
+                  </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <script src="/resources/js/script.js"></script>
+    <script src="/resources/js/scriptClient.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- codigo js para las validaciones-->
+    <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+          }, false)
+        })
+      })()
+    </script>
+    <% if (typeof alert != "undefined")  { %>
+      <script>
+          Swal.fire({
+              title: '<%= alertTitle %>',
+              text: '<%= alertMessage %>',
+              icon: '<%= alertIcon %>',
+              showConfirmButton: true,
+              timer: false
+          }).then(() => {
+              window.location = '/<%= ruta %>'
+          })
+      </script>
+  <% } %>
+
+  
+  </body>
+</html>

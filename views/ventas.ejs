@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ventas Comercial Jennifer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/resources/css/style.css" />
+    <link rel="shortcut icon" href="/resources/images/favicon.ico">
+
+    
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+	  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.6/css/dataTables.dataTables.css">
+  </head>
+  <body>
+    <%- include('sidebar.ejs') %>
+
+    <section class="home-section">
+      <div class="Container">
+        <div class="row">
+          <div class="Container px-3 py-1 contenedorventas">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <h2 class="centrado">Registro e historial de</h2>
+              <h2 class="centrado">ventas</h2>
+            </div>
+          </div>
+
+          <div class="Container">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div class="row">
+                <div class="accordion accordion-flush py-0" id="accordionFlushExample">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button
+                        class="accordion-button collapsed contenedorventas"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseOne">
+                        <h5>REGISTRAR UNA NUEVA VENTA</h5>
+                      </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                      <div class="accordion-body">
+                        <div class="Container">
+                          <div class="row">
+                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                              <h6 class="px-2"> Por favor seleccione el tipo de venta</h6>
+                              <select class="form-select" id="TipoDeVenta_Select" onchange="TipoVenta()">
+                                <option selected disabled value="">Seleccione una venta</option>
+                                <option value="Contado">Venta Contado</option>
+                                <option value="Credito">Venta Credito</option>
+                              </select>
+                            
+                              <!-- Formulario para Venta  -->
+                              <div id="formularioCredito" style="display: none">
+                                <form class="px-3 needs-validation" id="formVenta" novalidate>
+
+                                  <label for="BuscarCliente" class="form-label mt-2" >Buscar un cliente</label>
+                                  <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-success" type="button" id="btnBuscarCliente" onclick=" mostrarClienteVenta()">Buscar   <i class='bx bx-search'></i></button>
+                                  </div>
+
+                                  <div class="my-3">
+                                    <p class="text-success" id="client_name"  style="font-weight: bold;" hidden>Cliente</p>
+                                  </div>
+                                  <input id="CedulaCliente" hidden>
+            
+                                  <label for="BuscarVendedor" class="form-label" >Buscar un vendedor</label>
+                                  <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-success" type="button" id="btnBuscarVendedor" onclick="mostrarVendedorVenta()">Buscar   <i class='bx bx-search'></i></button>
+                                  </div>
+
+                                  <div class="my-3">
+                                    <p class="text-success" id="vendedor_name"  style="font-weight: bold;" hidden> Vendedor</p>
+                                  </div>
+
+                                  <input id="CedulaVendedor" hidden>
+                                     
+                                  <div class="mb-3">
+                                    <label for="Fecha_Venta" class="form-label">Ingrese la fecha de venta</label>
+                                    <input type="date" disabled class="form-control" id="Fecha_Venta" placeholder="Ingrese la fecha" onchange="ActualizarFecha()" required/>
+                                    <div class="invalid-feedback">El Campo es requerido</div>
+                                  </div>
+
+                                  <div class="mb-3">
+                                    <label for="plazo_compra" id="lb_plazo_compra" class="form-label">Plazo de Compra</label>
+                                    <input type="date" class="form-control" id="plazo_compra" placeholder="Ingrese plazo de compra" required/>
+                                    <div class="invalid-feedback">El Campo es requerido</div>
+                                  </div>
+
+                                  <div class="mb-3">
+                                    <label for="FrecuenciaAbono" class="form-label" id="lb_FrecuenciaAbono" >Seleccionar la frecuencia de abonos</label>
+                                    <select class="form-select" id="FrecuenciaAbono" aria-label="" required>
+                                      <label for="FrecuenciaAbono" class="form-label">Seleccione la frecuencia de abonos</label>
+                                      <option selected disabled value=""> Seleccione una opcion</option>
+                                      <option value="Semanal">Semanal</option>
+                                      <option value="Quincenal">Quincenal</option>
+                                      <option value="Mensual">Mensual</option>
+                                    </select>
+                                    <div class="invalid-feedback">El Campo es requerido</div>
+                                  </div>
+
+                                  <div class="mb-3">
+                                    <label for="text" class="form-label">Seleccionar categoria del producto a añadir</label>
+                                    <select class="form-select" id="categoriaSelect1" onchange="mostrarTablaSegunCategoria()">
+                                      <label for="Categoria" class="form-label">Seleccione la categoria del producto que desea</label>
+                                      <option selected disabled value="">
+                                        Seleccione una categoria
+                                      </option>
+                                      <option value="1">Calzado</option>
+                                      <option value="2">
+                                        Prendas de Vestir
+                                      </option>
+                                      <option value="3">Cosmeticos</option>
+                                      <option value="4">
+                                        Electrodomestico
+                                      </option>
+                                      <option value="5">
+                                        Productos Plasticos
+                                      </option>
+                                    </select>
+                                  </div>
+                                  
+
+                                </form>
+                              </div>
+                            </div>
+
+                            <!--Mostrar tablas segun la seleccion-->
+                            <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                              <div class="row">
+
+                                <div id="tablaPrendas" style="display: none">
+                                  <table class="table primary" id="tablePV">
+                                    <thead>
+                                      <tr>
+                                        <th class="centrado">Nombre del producto</th>
+                                        <th class="centrado">Marca</th>
+                                        <th class="centrado">Color</th>
+                                        <th class="centrado">Talla</th>
+                                        <th class="centrado">Existencia</th>
+                                        <th class="centrado">Precio</th>
+                                        <th class="centrado col-1"><!-- Acción --></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <% productos.forEach((producto) => { %>
+                                        <% if( producto.Categoria == 'Prendas de Vestir' && producto.Existencia > 0  ) { %>
+                                          <tr>
+                                            <td class="centrado"><%= producto.Tipo %></td>
+                                            <td class="centrado"><%= producto.Marca %></td>
+                                            <td class="centrado"><%= producto.Color %></td>
+                                            <td class="centrado"><%= producto.Talla %></td>
+                                            <td class="centrado"><%= producto.Existencia %></td>
+                                            <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                            <td class="row px-4 centrado">
+
+                                              <!-- Botones de acciones -->
+                                              <!-- <input type="number" class="centrado mb-2"/> -->
+                                              <button type="button" onclick="AñadirProducto('<%= producto.Id_Producto %>','<%= producto.Tipo %> <%= producto.Marca %> Color <%= producto.Color %> Talla <%= producto.Talla %>','<%= producto.Precio_Venta %>', '<%= producto.Existencia%>')" class="btn btn-success px-3" title="Añadir Producto"><i class="fa-solid fa-cart-plus"></i></button>
+                                            </td>
+                                          </tr>
+                                        <% } %>
+                                      <% }) %>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                                <div id="tablaCosmeticos" style="display: none">
+                                  <table class="table primary" id="TbCosmetics">
+                                    <thead>
+                                      <tr>
+                                        <th class="centrado">Nombre del producto</th>
+                                        <th class="centrado">Marca</th>
+                                        <th class="centrado">Color</th>
+                                        <th class="centrado">Existencia</th>
+                                        <th class="centrado">Precio</th>
+                                        <th class="centrado col-1"><!-- Acción --></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <% productos.forEach((producto) => { %>
+                                        <% if( producto.Categoria == 'Cosmeticos' && producto.Existencia > 0 ) { %>
+                                          <tr>
+                                            <td class="centrado"><%= producto.Clasificacion %> <%= producto.Tipo %></td>
+                                            <td class="centrado"><%= producto.Marca %></td>
+                                            <td class="centrado"><%= producto.Color %></td>
+                                            <td class="centrado"><%= producto.Existencia %></td>
+                                            <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                            <td class="row px-4 centrado">
+                                              <!-- Botones de acciones -->
+                                              <!-- <input type="number"class="centrado mb-2"/> -->
+                                              <button type="button" onclick="AñadirProducto('<%= producto.Id_Producto %>','<%= producto.Clasificacion %> <%= producto.Tipo %> <%= producto.Marca %> <%= producto.Color %> ','<%= producto.Precio_Venta %>', '<%= producto.Existencia%>')" class="btn btn-success px-3" title="Añadir Producto"><i class="fa-solid fa-cart-plus"></i></button>
+                                            </td>
+                                          </tr>
+                                        <% } %>
+                                      <% }) %>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                                <div id="tablaElectrodomesticos" style="display: none">
+                                  <table class="table primary" id="tableElectrodomesticos">
+                                    <thead>
+                                      <tr>
+                                        <th class="centrado">Nombre del producto</th>
+                                        <th class="centrado">Marca</th>
+                                        <th class="centrado">Modelo</th>
+                                        <th class="centrado">Color</th>
+                                        <th class="centrado">Existencia</th>
+                                        <th class="centrado">Precio</th>
+                                        <th class="centrado col-1"><!-- Acción --></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <% productos.forEach((producto) => { %>
+                                        <% if( producto.Categoria == 'Electrodomesticos' && producto.Existencia > 0  ) { %>
+                                          <tr>
+                                            <td class="centrado"><%= producto.Tipo %></td>
+                                            <td class="centrado"><%= producto.Marca %></td>
+                                            <td class="centrado"><%= producto.Modelo %></td>
+                                            <td class="centrado"><%= producto.Color %></td>
+                                            <td class="centrado"><%= producto.Existencia %></td>
+                                            <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                            <td class="row px-4 centrado">
+                                              <!-- Botones de acciones -->
+                                              <!-- <input type="number" class="centrado mb-2"/> -->
+                                              <button type="button" onclick="AñadirProducto('<%= producto.Id_Producto %>','<%= producto.Tipo %> <%= producto.Marca %> <%= producto.Modelo %> Color <%= producto.Color %>','<%= producto.Precio_Venta %>', '<%= producto.Existencia%>')" class="btn btn-success px-3" title="Añadir Producto"><i class="fa-solid fa-cart-plus"></i></button>
+                                            </td>
+                                          </tr>
+                                        <% } %>
+                                      <% }) %>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                                <div id="tablaPPlasticos" style="display: none">
+                                  <table class="table primary" id="tablePP">
+                                    <thead>
+                                      <tr>
+                                        <th class="centrado">Nombre del producto</th>
+                                        <th class="centrado">Marca</th>
+                                        <th class="centrado">Color</th>
+                                        <th class="centrado">Dimensiones</th>
+                                        <th class="centrado">Existencia</th>
+                                        <th class="centrado">Precio</th>
+                                        <th class="centrado"><!-- Acción --></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <% productos.forEach((producto) => { %>
+                                        <% if( producto.Categoria == 'Productos Plasticos' && producto.Existencia > 0  ) { %>
+                                          <tr>
+                                            <td class="centrado"><%= producto.Tipo %></td>
+                                            <td class="centrado"><%= producto.Marca %></td>
+                                            <td class="centrado"><%= producto.Color %></td>
+                                            <td class="centrado"><%= producto.Dimensiones %></td>
+                                            <td class="centrado"><%= producto.Existencia %></td>
+                                            <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                            <td class="row px-4 centrado">
+                                              <!-- Botones de acciones -->
+                                              <!-- <input type="number" class="centrado mb-2"/> -->
+                                              <button type="button" onclick="AñadirProducto('<%= producto.Id_Producto %>','<%= producto.Tipo %> <%= producto.Marca %> Color <%= producto.Color %>','<%= producto.Precio_Venta %>', '<%= producto.Existencia%>')" class="btn btn-success px-3" title="Añadir Producto"><i class="fa-solid fa-cart-plus"></i></button>
+                                            </td>
+                                          </tr>
+                                        <% } %>
+                                      <% }) %>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                                <div id="tablaCalzado" style="display: none">
+                                  <table class="table primary" id="tableCalzado">
+                                    <thead>
+                                      <tr>
+                                        <th class="centrado">Nombre del producto</th>
+                                        <th class="centrado">Marca</th>
+                                        <th class="centrado">Color</th>
+                                        <th class="centrado">Talla</th>
+                                        <th class="centrado">Existencia</th>
+                                        <th class="centrado">Precio</th>
+                                        <th class="centrado"><!-- Acción --></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <% productos.forEach((producto) => { %>
+                                        <% if( producto.Categoria == 'Calzado' && producto.Existencia > 0 ) { %>
+                                          <tr>
+                                            <td class="centrado"><%= producto.Tipo %> <%= producto.Modelo %></td>
+                                            <td class="centrado"><%= producto.Marca %></td>
+                                            <td class="centrado"><%= producto.Color %></td>
+                                            <td class="centrado"><%= producto.Talla %></td>
+                                            <td class="centrado"><%= producto.Existencia %></td>
+                                            <td class="centrado">C$ <%= producto.Precio_Venta %></td>
+                                            <td class="row px-4 centrado">
+                                              <!-- Botones de acciones -->
+                                              <!-- <input type="number" class="centrado mb-2"/> -->
+                                              <button type="button" onclick="AñadirProducto('<%= producto.Id_Producto %>','<%= producto.Tipo %> <%= producto.Modelo %> <%= producto.Marca %> Color <%= producto.Color %> Talla <%= producto.Talla %>','<%= producto.Precio_Venta %>','<%= producto.Existencia%>')" class="btn btn-success px-3" title="Añadir Producto"><i class="fa-solid fa-cart-plus"></i></button>
+                                            </td>
+                                          </tr>
+                                        <% } %>
+                                      <% }) %>
+                                    </tbody>
+ 
+                                  </table>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="Container" id="factura" style="display: none">
+                          <div class="row">
+                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2"></div>
+                            <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                              <table class="table" id="tablacliente">
+                                <thead>
+                                  <tr>
+                                    <th id="IdVenta" class="centrado">N° Venta:</th>
+                                    <th class="centrado"></th>
+                                    <th></th>
+                                    <th class="centrado"></th>
+                                    <th class="centrado"></th>
+                                  </tr>
+                                  <tr>
+                                    <th class="centrado">Cliente</th>
+                                    <th class="centrado">Vendedor</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="centrado">Fecha Venta</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td class="centrado" id="ClienteFactura">Nombre del Cliente</td>
+                                    <td class="centrado" id="VendedorFactura">Nombre del Vendedor</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="centrado" id="FechatablaFactura">Fecha Venta</td>
+                                  </tr>
+                                  <thead>
+                                    <tr>
+                                      <th class="centrado">Producto</th>
+                                      <th class="centrado">Cantidad Producto</th>
+                                      <th class="centrado">Precio</th>
+                                      <th class="centrado">Sub Total</th>
+                                      <th class="centrado"></th>
+                                    </tr>
+                                  </thead>
+                                </tbody>
+
+                                <tbody>
+                                </tbody>
+                                <thead>
+                                  <th></th>
+                                  <th></th>
+                                  <th></th>
+                                  <th></th>
+                                  <th class="centrado">Total</th>
+                                </thead>
+                                <tbody>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td class="centrado" id="celda_total">C$ 0</td>
+                                </tbody>
+                              </table>
+
+                              <div class="centrado text-end" id="btnfactura">
+                                <button class="btn btn-success" onclick="AñadirVenta()">Guardar Venta</button>
+                              </div>
+                            </div>
+                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="py-1 px-3 mb-2" style="display: flex; align-items: center; justify-content: space-between;">
+                <h4 style="color: black; font-size: 22px">Listado de Ventas</h4>
+
+                <% if( UserRol == 'Gerente') { %>
+                  <a class="btn btn-primary" onclick="abrirPanelReportes()">Generar Reporte ventas</a> 
+                <% } %>
+                
+
+                <div style="display: flex; align-items: center">
+
+                  <select onchange="Filtrar()" id="filtroTipoVenta"  class="form-select" aria-label="Default select example" style="background-color: rgb(128, 192, 128); color: white;">
+                    <option selected>Filtrar tipo de venta</option>
+                    <option value="Contado">Ventas al contado</option>
+                    <option value="Credito">Ventas al crédito</option>
+                    <option value="Todas">Mostrar todas las Ventas</option>
+                  </select>
+                  <!-- <button type="button" class="btn btn-success" title="Abonar" style="margin-left: 10px" onclick="mostrarPanelHistorialAbonos()"><i class="fa-solid fa-list"></i>Listar historial de abonos</button>-->
+                </div>
+              </div>
+
+              <script>
+                function Filtrar() 
+                {
+                    const Filtro = document.getElementById('filtroTipoVenta').value;
+                    // Redirigir a la misma página, pasando el filtro como parámetro en la URL
+                    window.location.href = '/ventas?tipoVenta=' + Filtro;
+                }
+              </script>
+
+              <div class="Container">
+                <div class="row">
+                  <div>
+                    <table class="table primary px-3 hover" id="TableVentas">
+                      <thead>
+                        <tr>
+                          <th class="centrado">Tipo de venta</th>
+                          <th class="centrado">Nombre del cliente</th>
+                          <th class="centrado">Nombre de vendedor</th>
+                          <th class="centrado">Fecha de venta</th>
+                          <th class="centrado">Cantidad total</th>
+                          <th class="centrado">Estado de la Venta</th>
+                          <th class="centrado"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% ventas.forEach((Venta) => { %>
+                          <% if (Tipo == 'Todas' || Tipo == null ) { %>
+                            <tr>
+                              <td class="centrado">Venta al <%= Venta.Tipo_Venta %></td>
+                              <td class="centrado"><%= Venta.Cliente %></td>
+                              <td class="centrado"><%= Venta.Vendedor %></td>
+                              <td class="centrado"><%= Venta.Fecha_Venta %></td>
+                              <td class="centrado">C$ <%= Venta.Total_Venta %></td>
+                              <td class="centrado"><%= Venta.Estado_Venta %></td>
+                              <td class="centrado">
+                                <div class="d-flex align-items-center justify-content-center">
+                                  <button
+                                    type="button"
+                                    class="btn btn-success info-venta mx-1"
+                                    title="Informacion de la venta"
+                                    onclick="mostrarDetallesVenta('<%= Venta.Id_Venta %>','<%= Venta.Cliente %>','<%= Venta.Vendedor %>','<%= Venta.Fecha_Venta %>','<%= Venta.Total_Venta %>')">
+                                    <i class="fa-solid fa-money-check-dollar"></i>
+                                  </button>
+
+                                  <% if (  Venta.Tipo_Venta  == 'Credito') { %>
+                                    <button 
+                                      type="button" 
+                                      class="btn btn-primary mx-1" 
+                                      title="Abonos Realizados" 
+                                      onclick="mostrarPanelHistorialAbonosUnico('<%= Venta.Id_Venta %>','<%= Venta.Cliente %>','<%= Venta.Vendedor %>')" >
+                                      <i class="fa-solid fa-receipt fa-lg" style="color: #ffffff;"></i>
+                                    </button>
+                                  <% } %>
+                                </div>
+                              </td>
+                            </tr>
+                          <% } else if(Tipo == 'Credito' && Venta.Tipo_Venta == 'Credito' ){ %>
+                            <tr>
+                              <td class="centrado">Venta al <%= Venta.Tipo_Venta %></td>
+                              <td class="centrado"><%= Venta.Cliente %></td>
+                              <td class="centrado"><%= Venta.Vendedor %></td>
+                              <td class="centrado"><%= Venta.Fecha_Venta %></td>
+                              <td class="centrado">C$ <%= Venta.Total_Venta %></td>
+                              <td class="centrado"><%= Venta.Estado_Venta %></td>
+                              <td class="centrado">
+                                <div class="d-flex align-items-center justify-content-center">
+                                  <button
+                                    type="button"
+                                    class="btn btn-success info-venta mx-1"
+                                    title="Informacion de la venta"
+                                    onclick="mostrarDetallesVenta('<%= Venta.Id_Venta %>','<%= Venta.Cliente %>','<%= Venta.Vendedor %>','<%= Venta.Fecha_Venta %>','<%= Venta.Total_Venta %>')">
+                                    <i class="fa-solid fa-money-check-dollar"></i>
+                                  </button>
+
+                                  <% if (  Venta.Tipo_Venta  == 'Credito') { %>
+                                    <button 
+                                      type="button" 
+                                      class="btn btn-primary mx-1" 
+                                      title="Abonos Realizados" 
+                                      onclick="mostrarPanelHistorialAbonosUnico('<%= Venta.Id_Venta %>','<%= Venta.Cliente %>','<%= Venta.Vendedor %>')" >
+                                      <i class="fa-solid fa-receipt fa-lg" style="color: #ffffff;"></i>
+                                    </button>
+                                  <% } %>
+                                </div>
+                              </td>
+                            </tr>
+                          <% } else if(Tipo == 'Contado' && Venta.Tipo_Venta == 'Contado' ){ %>
+                            <tr>
+                              <td class="centrado">Venta al <%= Venta.Tipo_Venta %></td>
+                              <td class="centrado"><%= Venta.Cliente %></td>
+                              <td class="centrado"><%= Venta.Vendedor %></td>
+                              <td class="centrado"><%= Venta.Fecha_Venta %></td>
+                              <td class="centrado">C$ <%= Venta.Total_Venta %></td>
+                              <td class="centrado"><%= Venta.Estado_Venta %></td>
+                              <td class="centrado">
+                                <button
+                                  type="button"
+                                  class="btn btn-success info-venta"
+                                  title="Informacion de la venta"
+                                  onclick="mostrarDetallesVenta('<%= Venta.Id_Venta %>','<%= Venta.Cliente %>','<%= Venta.Vendedor %>','<%= Venta.Fecha_Venta %>','<%= Venta.Total_Venta %>')">
+                                  <i class="fa-solid fa-money-check-dollar"></i>
+                                </button>
+                                
+                              </td>
+                              
+                            </tr>
+                          <% }%>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div id="ProductoDevuelto" class="panel-flotante panel-ancho" style="display: none" >
+                <div class="panel-content">
+                  <h4 id="Title_Devolucion">Devolucion de productos</h4>
+                  <div style="max-height: 300px; overflow-y: auto">
+                    <table class="table" id="tablaDevolucionVenta">
+                      <thead>
+                        <tr>
+                          <th class="centrado">Cliente</th>
+                          <th class="centrado">Vendedor</th>
+                          <th></th>
+                          <th class="centrado">Fecha</th>
+                          <th class="centrado"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="centrado" id="ClienteDevuelto">Nolan</td>
+                          <td class="centrado" id="VendedorDevuelto">kenneth</td>
+                          <td></td>
+                          <td class="centrado" ><input type="date" class="form-control" id="FechaDevuelto"></td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                      <thead>
+                        <tr>
+                          <th class="centrado">Producto</th>
+                          <th class="centrado">Cantidad</th>
+                          <th></th>
+                          <th class="centrado">Cantidad de producto a devolver</th>
+                          <th class="centrado"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="centrado" id="NombreProductoDevuelto">Nike</td>
+                          <td class="centrado" id="StockAvailable">10</td>
+                          <td></td>
+                          <td class="centrado" ><input type="number" class="form-control" id="Cantidad_Devolver" ></td>
+                          <td></td>
+                        </tr>        
+                      </tbody>
+                    </table>
+
+                    
+
+
+                    
+                    
+                  </div>
+                  
+                  <div class="form-floating mb-3">
+                    <input id="idventadevolver" hidden>
+                    <input id="idproductodevolver" hidden>
+                    <input class="form-control" type="text" id="MotivoDevolucion" style="width: 100%; height: 100px; justify-content:center">
+                    <label for="MotivoDevolucion">Motivo de la Devolucion</label>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="cerrarPanelDevolverProducto()"
+                  >
+                    Cancelar
+                  </button>
+                  <button type="button" class="btn btn-primary 3px 3py" onclick="DevolverProducto();">
+                    Realizar Devolucion
+                  </button>
+                </div>
+              </div>
+
+              <div id="panelHistorialAbonosVenta" class="panel-flotante" style="display: none">
+                <div class="panel-content">
+                  <h4 id="TitleHistorialAbonosVenta">Historial de abonos</h4>
+                  <nav class="navbar bg-body-tertiary">
+                  </nav>
+                  <div style="max-height: 300px; overflow-y: auto">
+                    <table class="table primary" id="Tabla_Historial_Abonos_Venta">
+                      <thead>
+                        <tr>
+                          <th class="centrado">Nombre del cliente</th>
+                          <th class="centrado">Nombre del vendedor</th>
+                          <th class="centrado">Fecha del abono realizado</th>
+                          <th class="centrado">Monto abonado</th>
+                          <th class="centrado">Saldo restante</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="cerrarPanelHistorialAbonosUnico()"
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+
+              <div id="panelDetalleVentas" class="panel-flotante panel-ancho" style="display: none">
+                <div class="panel-content ">
+                  <h4 id="DetalleTitle">Detalle Venta </h4>
+
+                  <div style="max-height: 300px; overflow-y: auto">
+                    <button
+                    type="button"
+                    class="btn btn-outline-primary  mt-2 mb-4"
+                    onclick="genPDF()">
+                    Generar Pdf <i class="fas fa-file-pdf mx-1"></i>
+                  </button>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <table class="table" id="tablaDetalleVenta">
+                        <thead>
+                          <tr>
+                            <th class="centrado">Cliente</th>
+                            <th class="centrado">Vendedor</th>
+                            <th></th>
+                            <th class="centrado">Fecha</th>
+                            <th class="centrado"></th>
+                            <th class="centrado"></th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr>
+                            <td class="centrado" id="ClienteDetalle"></td>
+                            <td class="centrado" id="VendedorDetalle"></td>
+                            <td></td>
+                            <td class="centrado" id="FechaDetalle"></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <thead>
+                            <tr>
+                              <th class="centrado">Producto</th>
+                              <th class="centrado">Cantidad Producto</th>
+                              <th class="centrado"></th>
+                              <th class="centrado">Precio</th>
+                              <th class="centrado">Sub Total</th>
+                              <th class="centrado"></th>
+                            </tr>
+                          </thead>
+                        </tbody>
+
+                       <!--  Productos -->
+                        <tbody>
+                         
+                        </tbody>
+
+                        <thead>
+                          <th></th><th></th><th></th><th></th>
+                          <th>Total</th>
+                          <th></th>
+                        </thead>
+
+                        <tbody>
+                          <td></td><td></td><td></td><td ></td>
+                          <td class="centrado" id="TotalDetalle"></td>
+                          <td ></td>
+                        </tbody>
+                      </table>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="cerrarDetallesVenta()"
+                  >
+                    Cerrar
+                  </button>
+
+                </div> 
+                    <!-- onclick="cerrarDetallesVenta()"
+                  >
+                    Cerrar -->
+                  
+                </div>
+              </div>
+              </div> 
+
+              <div id="BuscarClienteVenta"class="panel-flotante panelBusqueda-ancho"style="display: none">
+                <div class="panel-content">
+                  <h4 id="Title_Compras">Buscar un cliente</h4>
+
+                  
+                  <div style="max-height: 400px; overflow-y: auto">
+                    <a type="button" href="/Clientes" class="btn btn-success px-3 mt-2 mb-3" title="Agregar Nuevo Cliente">
+                      Agregar un nuevo Cliente <i class="fa-solid fa-user-plus mx-1"></i>
+                    </a>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <table class="table primary" id="TableClientsVenta">
+                          <thead>
+                            <tr>
+                              <th class="centrado">Nombre</th>
+                              <th class="centrado">Cedula</th>
+                              <th class="centrado">Credito Disponible</th>
+                              <th class="centrado"></th>
+                            </tr>
+                            <tbody>
+                              <% clientes.forEach((client) => { %>
+                                <tr>
+                                  <td class="centrado"><%= client.Nombre %></td>
+                                  <td class="centrado"><%= client.Cedula %></td>
+                                  <td class="centrado">C$ <%= client.Credito_Disponible %></td>
+                                  <td class="centrado"><button type="button" class="btn btn-success px-3" title="Añadir" onclick="BuscarCliente('<%= client.Cedula %>')"><i class="fa-solid fa-user-plus mx-1"></i></button></td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                          </thead>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="cerrarClienteVenta()"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+  
+              <div id="BuscarVendedorVenta"class="panel-flotante panelBusqueda-ancho"style="display: none">
+                <div class="panel-content">
+                  <h4 id="Title_Compras">Buscar un vendedor</h4>
+                  <div style="max-height: 300px; overflow-y: auto">
+                    <a type="button" href="/Vendedores" class="btn btn-success px-3 mt-2 mb-3" title="Agregar Nuevo Vendedor">
+                      Agregar un nuevo Vendedor <i class="fa-solid fa-user-plus mx-1"></i>
+                    </a>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <table class="table primary" id="TableVendedoresVenta">
+                          <thead>
+                            <tr>
+                              <th class="centrado">Nombre</th>
+                              <th class="centrado">Cedula</th>
+                              <th class="centrado"></th>
+                            </tr>
+                            <tbody>
+                              <% vendedores.forEach((vendedor) => { %>
+                                <tr>
+                                  <td class="centrado"><%= vendedor.Nombre %></td>
+                                  <td class="centrado"><%= vendedor.Cedula %></td>
+                                  <td class="centrado"><button type="button" class="btn btn-success px-3" title="Añadir" onclick="BuscarVendedor('<%= vendedor.Cedula %>')"><i class="fa-solid fa-user-plus mx-1"></i></button></td>
+                                </tr>
+                              <% }) %>
+                            </tbody>
+                          </thead>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="cerrarVendedorVenta()"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+
+              <div id="PanelReportes"class="panel-flotante panel-ancho"style="display: none">
+                <div class="panel-content">
+                  <h3>Generar Reporte de Ventas</h3>
+                  <div class="container my-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Seleccione el periodo de tiempo para el reporte</h5>
+                            <form id="report-form" action="/ReporteVentas" method="post">
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="period" id="mes" value="mes">
+                                        <label class="form-check-label" for="mes">Mes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="period" id="semana" value="semana">
+                                        <label class="form-check-label" for="semana">Semana</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="period" id="quincena" value="quincena">
+                                        <label class="form-check-label" for="quincena">Quincena</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="period" id="rango-fechas" value="rango">
+                                        <label class="form-check-label" for="rango-fechas">Rango de Fechas</label>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="select-mes" style="display: none;">
+                                    <label for="mes-select">Seleccione el mes</label>
+                                    <select class="form-control" id="mes-select" name="mes-select">
+                                        <!-- Opciones se agregarán dinámicamente -->
+                                    </select>
+                                </div>
+                                <div class="form-group" id="rango-fechas-inputs" style="display: none;">
+                                    <label for="fecha_inicio">Fecha de inicio</label>
+                                    <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio">
+                                    <label for="fecha_fin" class="mt-2">Fecha de fin</label>
+                                    <input type="date" class="form-control" id="fecha_fin" name="fecha_fin">
+                                </div>
+                                <div class="mt-3">
+                                  <button type="submit" class="btn btn-info"><i class="fa-solid fa-file-pdf"></i> Generar Reporte</button>
+                                  <button type="button" class="btn btn-danger" onclick="cerrarPanelReportes()"><i class="fa-solid fa-xmark"></i> Cancelar </button>
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+                  
+                  
+                </div>
+              </div>
+
+
+
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap5.min.js"></script>      
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
+
+
+    <!-- codigo js para las validaciones-->
+    <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (() => {
+        "use strict";
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll(".needs-validation");
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach((form) => {
+          form.addEventListener(
+            "submit",
+            (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+    </script>
+    
+    <% if (typeof alert != "undefined") { %>
+      <script>
+        Swal.fire({
+          title: "<%= alertTitle %>",
+          text: "<%= alertMessage %>",
+          icon: "<%= alertIcon %>",
+          showConfirmButton: true,
+          timer: false,
+        }).then(() => {
+          window.location = "/<%= ruta %>";
+        });
+      </script>
+      <% } %>
+
+    <script src="/resources/js/script.js"></script>
+    <script src="/resources/js/ScriptVentas.js"></script>
+
+    <script>
+      $(document).ready(function()
+      {
+        $('#tableCalzado').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Producto:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Productos",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+      });
+        
+      $(document).ready(function(){
+        $('#tablePP').DataTable({
+            info: false,
+            ordering: false,
+            lengthMenu: [5,10,15,20,25,50],
+            "oLanguage": {
+              "sSearch": "Buscar un Producto:",
+              "sZeroRecords": "No se encontraron resultados",
+              "sLengthMenu": "Mostrar  _MENU_  Productos",
+              "sZeroRecords": "No se encontraron resultados",
+              "sLoadingRecords": "Cargando...",
+              "oPaginate": {
+                  "sFirst": "Primero",
+                  "sLast": "Último",
+                  "sNext": "Siguiente",
+                  "sPrevious": "Anterior"}
+              }
+          });
+        });
+      
+      $(document).ready(function(){
+          
+        $('#tablePV').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Producto:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Productos",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+    });
+
+      $(document).ready(function(){
+          
+        $('#TbCosmetics').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Producto:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Productos",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+    });
+
+      $(document).ready(function(){
+          
+        $('#tableElectrodomesticos').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Producto:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Productos",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+    });
+
+      $(document).ready(function(){
+        
+      $('#TableVentas').DataTable({
+        info: false,
+        ordering: false,
+        lengthMenu: [5,10,15,20,25,50],
+        "oLanguage": {
+          "sSearch": "Buscar una Venta:",
+          "sZeroRecords": "No se encontraron resultados",
+          "sLengthMenu": "Mostrar  _MENU_  Ventas",
+          "sZeroRecords": "No se encontraron resultados",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+              "sFirst": "Primero",
+              "sLast": "Último",
+              "sNext": "Siguiente",
+              "sPrevious": "Anterior"}
+          }
+      });
+  });
+    
+      $(document).ready(function(){
+            
+        $('#TableClientsVenta').DataTable({
+          info: false,
+          ordering: false,
+          lengthMenu: [5,10,15,20,25,50],
+          "oLanguage": {
+            "sSearch": "Buscar un Cliente:",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLengthMenu": "Mostrar  _MENU_  Clientes",
+            "sZeroRecords": "No se encontraron resultados",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"}
+            }
+        });
+    });
+      
+      $(document).ready(function(){
+        
+      $('#TableVendedoresVenta').DataTable({
+        info: false,
+        ordering: false,
+        lengthMenu: [5,10,15,20,25,50],
+        "oLanguage": {
+          "sSearch": "Buscar un Vendedor:",
+          "sZeroRecords": "No se encontraron resultados",
+          "sLengthMenu": "Mostrar  _MENU_  Vendedores",
+          "sZeroRecords": "No se encontraron resultados",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+              "sFirst": "Primero",
+              "sLast": "Último",
+              "sNext": "Siguiente",
+              "sPrevious": "Anterior"}
+          }
+      });
+  });
+    
+    </script> 
+
+  </body>
+</html>

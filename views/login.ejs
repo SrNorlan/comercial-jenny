@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="resources/css/style.css">
+    <link rel="shortcut icon" href="/resources/images/favicon.ico">
+</head>
+<body>
+    <div class="container-login">
+        <div class="login-form">
+            <h1>Almacen Comercial Jennifer</h1>
+            <img class="img-logo" src="resources/images/Logo.png">
+            <form action="/auth" method="POST" autocomplete="off">
+
+                <input list="usuaries" type="text" name="user" id="user" placeholder="Usuario" >
+                <!-- <datalist id="usuaries">
+                    <option value="Edge">
+                    <option value="Firefox">
+                    <option value="Chrome">
+                    <option value="Opera">
+                    <option value="Safari">
+                </datalist> -->
+
+                <input type="password" name="pass" id="pass" placeholder="Contraseña" >
+                <input type="submit" class="btn-login" value="Iniciar Sesion">
+
+                
+                
+
+                
+
+            </form>
+    
+            <!-- <a href="register" class="btn-register">Registrar usuario</a> -->
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <% if (typeof alert != "undefined")  { %>
+        <script>
+            Swal.fire({
+                title: '<%= alertTitle %>',
+                text: '<%= alertMessage %>',
+                icon: '<%= alertIcon %>',
+                showConfirmButton: <%= showConfirmButton %> ,
+                timer: <%= timer %>
+            }).then(() => {
+                window.location = '/<%= ruta %>'
+            })
+        </script>
+    <% } %>
+
+</body>
+
+</html>
