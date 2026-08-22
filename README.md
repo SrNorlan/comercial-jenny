@@ -73,23 +73,47 @@ npm.cmd --prefix client install
 
 En PowerShell se recomienda `npm.cmd` si aparece el error `npm.ps1 cannot be loaded`.
 
-## Levantar el proyecto migrado
+## Levantar el sistema principal
 
-Para iniciar simultáneamente la API y React/Vite:
+El comando principal inicia el sistema completo original con sus vistas EJS:
 
 ```powershell
 npm.cmd run dev
 ```
 
-Direcciones:
+Abre:
 
 ```text
-Frontend React: http://localhost:5173/
-API REST:       http://localhost:4500/
-Health check:   http://localhost:4500/api/v1/health
+Sistema principal: http://localhost:4000/login
 ```
 
+El sistema principal utiliza las vistas originales de clientes, productos, ventas, compras, abonos, proveedores, colaboradores, dashboard y reportes.
+
 Si los puertos están ocupados, no inicies una segunda instancia. Usa las URLs de los procesos que ya están ejecutándose.
+
+## Levantar servicios migrados
+
+La API REST se inicia por separado:
+
+```powershell
+npm.cmd run dev:api
+```
+
+La API queda en `http://localhost:4500`.
+
+El cliente React experimental se inicia por separado:
+
+```powershell
+npm.cmd run dev:client
+```
+
+React queda en `http://localhost:5173`.
+
+Para iniciar los tres procesos al mismo tiempo:
+
+```powershell
+npm.cmd run dev:all
+```
 
 ## Levantar el sistema original
 

@@ -4,10 +4,12 @@
   "main": "app.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
-    "start": "node server/src/index.js",
+    "start": "node app.js",
     "start:api": "node server/src/index.js",
     "dev:api": "nodemon server/src/index.js",
-    "dev": "concurrently \"npm run dev:api\" \"npm --prefix client run dev\""
+    "dev": "nodemon app.js",
+    "dev:client": "npm --prefix client run dev",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:api\" \"npm run dev:client\""
   },
   "keywords": [],
   "author": "",
