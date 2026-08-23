@@ -1,4 +1,5 @@
 const db = require('../../config/db');
+const { requirePositiveInteger, requirePositiveNumber, validateItems } = require('../../utils/validation');
 
 async function list() {
   const { rows } = await db.query('SELECT * FROM compras ORDER BY fecha_compra DESC, id_compra DESC');
@@ -6,9 +7,11 @@ async function list() {
 }
 
 async function create({ idCompra, idProveedor, idComprador, totalCompra, items }) {
-  if (!Array.isArray(items) || items.length === 0) {
-    const error = new Error('La compra debe incluir productos.'); error.statusCode = 400; throw error;
-  }
+  requirePositiveInteger(idCompra, 'El identificador de compra');
+  requirePositiveInteger(idProveedor, 'El proveedor');
+  requirePositiveInteger(idComprador, 'El comprador');
+  requirePositiveNumber(totalCompra, 'El total');
+  validateItems(items, 'compra');
   const client = await db.pool.connect();
   try {
     await client.query('BEGIN');

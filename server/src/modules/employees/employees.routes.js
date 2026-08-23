@@ -1,6 +1,10 @@
 const router = require('express').Router();
-const db = require('../../config/db');
+const controller = require('./employees.controller');
 const { verifyAuth } = require('../../middlewares/auth.middleware');
+const { requireRole } = require('../../middlewares/role.middleware');
 router.use(verifyAuth);
-router.get('/', async (req, res, next) => { try { const { rows } = await db.query('SELECT * FROM mostrarcolaboradores ORDER BY tipo_persona, nombre'); res.json({ success: true, data: rows }); } catch (error) { next(error); } });
+router.get('/', controller.list);
+router.post('/', requireRole('Gerente'), controller.create);
+router.put('/:id', requireRole('Gerente'), controller.update);
+router.patch('/:id/status', requireRole('Gerente'), controller.updateStatus);
 module.exports = router;

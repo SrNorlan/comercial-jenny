@@ -178,13 +178,7 @@ El orden correcto es:
 1. `schema_postgres.sql`
 2. `seed_postgres.sql`
 
-El archivo original de MySQL está guardado en:
-
-```text
-server/db/migrations/mysql_legacy.sql
-```
-
-No ejecutes ese archivo directamente en PostgreSQL.
+La base activa utiliza exclusivamente los archivos PostgreSQL `schema_postgres.sql` y `seed_postgres.sql`.
 
 ## 8. Verificar las tablas
 
@@ -251,7 +245,7 @@ Se usa `npm.cmd` porque algunas configuraciones de PowerShell bloquean `npm.ps1`
 
 ## 10. Iniciar la aplicación
 
-Para iniciar la API nueva y el cliente React:
+Para iniciar Express con el cliente React compilado y la API:
 
 ```powershell
 npm.cmd run dev
@@ -260,26 +254,16 @@ npm.cmd run dev
 Direcciones:
 
 ```text
-Frontend React:  http://localhost:5173/
-API REST:        http://localhost:4500/
-Health check:    http://localhost:4500/api/v1/health
+Aplicacion:      http://localhost:4000/
+Swagger UI:      http://localhost:4000/api-docs
+Health check:    http://localhost:4000/api/v1/health
 ```
 
-El sistema original con vistas EJS se ejecuta en:
-
-```powershell
-node app.js
-```
-
-Y queda disponible en:
-
-```text
-http://localhost:4000/login
-```
+La API tambien puede iniciarse de forma independiente con `npm.cmd run dev:api`; en ese caso queda en `http://localhost:4500` y Swagger en `http://localhost:4500/api-docs`.
 
 ## 11. Usuario de prueba
 
-El usuario configurado para iniciar sesión en el sistema original es:
+El usuario configurado para iniciar sesión en la aplicacion es:
 
 ```text
 Usuario: admin

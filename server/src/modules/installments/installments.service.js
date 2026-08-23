@@ -1,4 +1,5 @@
 const db = require('../../config/db');
+const { requirePositiveInteger, requirePositiveNumber } = require('../../utils/validation');
 
 async function listOpenCredit() {
   const { rows } = await db.query('SELECT * FROM showventascredito ORDER BY fecha_venta DESC');
@@ -6,6 +7,8 @@ async function listOpenCredit() {
 }
 
 async function create({ idVenta, montoAbonado, fechaAbono }) {
+  requirePositiveInteger(idVenta, 'La venta');
+  requirePositiveNumber(montoAbonado, 'El monto abonado');
   const client = await db.pool.connect();
   try {
     await client.query('BEGIN');

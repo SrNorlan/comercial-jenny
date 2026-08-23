@@ -1,9 +1,15 @@
 const db = require('../../config/db');
+const { requirePositiveInteger, requirePositiveNumber, validateItems, validationError } = require('../../utils/validation');
 
 async function list() { const { rows } = await db.query('SELECT * FROM mostrarventas ORDER BY fecha_venta DESC'); return rows; }
 
 async function create({ idVenta, idCliente, idVendedor, tipoVenta, totalVenta, plazoCompra, frecuenciaAbonos, items }) {
-  if (!Array.isArray(items) || items.length === 0) { const error = new Error('La venta debe incluir productos.'); error.statusCode = 400; throw error; }
+  requirePositiveInteger(idVenta, 'El identificador de venta');
+  requirePositiveInteger(idCliente, 'El cliente');
+  requirePositiveInteger(idVendedor, 'El vendedor');
+  if (!['Contado', 'Credito'].includes(tipoVenta)) throw validationError('El tipo de venta no es válido.');
+  requirePositiveNumber(totalVenta, 'El total');
+  validateItems(items, 'venta');
   const client = await db.pool.connect();
   try {
     await client.query('BEGIN');

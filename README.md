@@ -1,6 +1,6 @@
 # Comercial Jenny
 
-Sistema de gestión comercial con PostgreSQL, API REST, cliente React/Vite y una interfaz EJS heredada que se conserva durante la migración.
+Sistema de gestión comercial con PostgreSQL, API REST, cliente React/Vite y Swagger UI.
 
 ## Requisitos
 
@@ -44,7 +44,7 @@ psql -U postgres -d comercial_jenny -f "server\db\schema_postgres.sql"
 psql -U postgres -d comercial_jenny -f "server\db\seed_postgres.sql"
 ```
 
-Los comandos solicitarán la contraseña del usuario `postgres`. El archivo original de MySQL está en `server/db/migrations/mysql_legacy.sql` y no debe ejecutarse directamente en PostgreSQL.
+Los comandos solicitarán la contraseña del usuario `postgres`. La base activa utiliza exclusivamente los archivos PostgreSQL indicados arriba.
 
 ## Configurar el entorno
 
@@ -75,7 +75,7 @@ En PowerShell se recomienda `npm.cmd` si aparece el error `npm.ps1 cannot be loa
 
 ## Levantar el sistema principal
 
-El comando principal inicia el sistema completo original con sus vistas EJS:
+El comando principal inicia Express y sirve la aplicación React compilada:
 
 ```powershell
 npm.cmd run dev
@@ -84,14 +84,12 @@ npm.cmd run dev
 Abre:
 
 ```text
-Sistema principal: http://localhost:4000/login
+Sistema principal: http://localhost:4000
 ```
-
-El sistema principal utiliza las vistas originales de clientes, productos, ventas, compras, abonos, proveedores, colaboradores, dashboard y reportes.
 
 Si los puertos están ocupados, no inicies una segunda instancia. Usa las URLs de los procesos que ya están ejecutándose.
 
-## Levantar servicios migrados
+## Levantar la API por separado
 
 La API REST se inicia por separado:
 
@@ -99,49 +97,7 @@ La API REST se inicia por separado:
 npm.cmd run dev:api
 ```
 
-La API queda en `http://localhost:4500`.
-
-El cliente React experimental se inicia por separado:
-
-```powershell
-npm.cmd run dev:client
-```
-
-React queda en `http://localhost:5173`.
-
-Para iniciar los tres procesos al mismo tiempo:
-
-```powershell
-npm.cmd run dev:all
-```
-
-## Levantar el sistema original
-
-La interfaz completa anterior usa EJS y está disponible en el puerto `4000`. Iníciala en otra terminal:
-
-```powershell
-node app.js
-```
-
-Si PowerShell no reconoce `node`, usa:
-
-```powershell
-& "C:\Program Files\nodejs\node.exe" app.js
-```
-
-Abre:
-
-```text
-http://localhost:4000/login
-```
-
-Credenciales de prueba:
-
-```text
-Usuario: admin
-Contraseña: admin
-Rol: Gerente
-```
+La API queda en `http://localhost:4500` y Swagger en `http://localhost:4500/api-docs`.
 
 ## API disponible
 
@@ -160,13 +116,19 @@ Las rutas REST están agrupadas bajo `/api/v1`:
 /api/v1/reports
 ```
 
+La interfaz interactiva de Swagger esta disponible en:
+
+```text
+http://localhost:4000/api-docs
+```
+
 La autenticación usa JWT en cookie HttpOnly o en el encabezado `Authorization: Bearer <token>`.
 
 ## Estado de la migración
 
 La API PostgreSQL ya incluye autenticación, clientes, productos, ventas, compras, abonos, devoluciones, empleados, proveedores y reportes. Las operaciones críticas utilizan transacciones y los cambios de inventario, crédito y estados se gestionan mediante triggers PostgreSQL.
 
-Las carpetas `controllers/`, `models/`, `routes/`, `services/`, `views/` y `public/` contienen temporalmente la interfaz EJS original para mantenerla disponible durante la migración progresiva al cliente React.
+La interfaz activa es React/Vite y el backend activo es la API REST bajo `/api/v1`.
 
 ## Pruebas
 

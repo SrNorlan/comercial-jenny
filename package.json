@@ -5,11 +5,11 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
     "start": "node app.js",
+    "build:client": "npm --prefix client run build",
     "start:api": "node server/src/index.js",
     "dev:api": "nodemon server/src/index.js",
     "dev": "nodemon app.js",
-    "dev:client": "npm --prefix client run dev",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:api\" \"npm run dev:client\""
+    "dev:all": "npm run build:client && npm run dev"
   },
   "keywords": [],
   "author": "",
@@ -18,9 +18,10 @@
     "@playwright/test": "^1.52.0",
     "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
+    "concurrently": "^9.1.2",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "fs": "^0.0.1-security",
@@ -33,10 +34,9 @@
     "path": "^0.12.7",
     "pdfkit": "^0.15.0",
     "pdfkit-table": "^0.1.99",
-    "pdfmake": "^0.2.10"
-    ,"cors": "^2.8.5"
-    ,"pg": "^8.13.1"
-    ,"concurrently": "^9.1.2"
+    "pdfmake": "^0.2.10",
+    "pg": "^8.13.1",
+    "swagger-ui-express": "^5.0.1"
   },
   "description": "",
   "devDependencies": {

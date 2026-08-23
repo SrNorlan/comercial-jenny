@@ -1,7 +1,11 @@
 const router = require('express').Router();
 const controller = require('./products.controller');
 const { verifyAuth } = require('../../middlewares/auth.middleware');
+const { requireRole } = require('../../middlewares/role.middleware');
 router.use(verifyAuth);
 router.get('/', controller.list);
+router.post('/', requireRole('Gerente'), controller.create);
+router.put('/:id', requireRole('Gerente'), controller.update);
+router.patch('/:id/status', requireRole('Gerente'), controller.updateStatus);
 router.get('/:id', controller.get);
 module.exports = router;
