@@ -6,8 +6,7 @@ Sistema de gestión comercial con PostgreSQL, API REST, cliente React/Vite y Swa
 
 - Windows 10 o superior
 - Node.js 18 o superior
-- PostgreSQL 14 o superior
-- PostgreSQL ejecutándose en el puerto `5432`
+- PostgreSQL 14 o superior, ejecutándose en el puerto `5432`
 
 La guía detallada está en [GUIA_BASE_DATOS_POSTGRESQL.md](GUIA_BASE_DATOS_POSTGRESQL.md).
 
@@ -28,7 +27,7 @@ $env:Path = "C:\Program Files\PostgreSQL\18\bin;C:\Program Files\nodejs;" + $env
 Entra en la carpeta del proyecto:
 
 ```powershell
-cd "C:\Users\owner\Desktop\AMC Jenny 2.0"
+cd "C:\Users\owner\Documents\git\comercial-jenny"
 ```
 
 Crea la base de datos:
@@ -73,31 +72,34 @@ npm.cmd --prefix client install
 
 En PowerShell se recomienda `npm.cmd` si aparece el error `npm.ps1 cannot be loaded`.
 
-## Levantar el sistema principal
+## Levantar el sistema
 
-El comando principal inicia Express y sirve la aplicación React compilada:
+Para desarrollo con recarga, abre dos terminales desde la raíz del proyecto.
 
-```powershell
-npm.cmd run dev
-```
-
-Abre:
-
-```text
-Sistema principal: http://localhost:4000
-```
-
-Si los puertos están ocupados, no inicies una segunda instancia. Usa las URLs de los procesos que ya están ejecutándose.
-
-## Levantar la API por separado
-
-La API REST se inicia por separado:
+Terminal 1, API:
 
 ```powershell
 npm.cmd run dev:api
 ```
 
-La API queda en `http://localhost:4500` y Swagger en `http://localhost:4500/api-docs`.
+Terminal 2, cliente React/Vite:
+
+```powershell
+npm.cmd --prefix client run dev
+```
+
+Abre `http://localhost:4000`. Vite reenvía `/api` a `http://localhost:4500`.
+
+Para servir el cliente compilado desde Express en el puerto `4000`:
+
+```powershell
+npm.cmd run build:client
+npm.cmd run dev
+```
+
+Abre `http://localhost:4000`.
+
+Si los puertos están ocupados, no inicies una segunda instancia. Usa las URLs de los procesos que ya están ejecutándose.
 
 ## API disponible
 
@@ -116,10 +118,11 @@ Las rutas REST están agrupadas bajo `/api/v1`:
 /api/v1/reports
 ```
 
-La interfaz interactiva de Swagger esta disponible en:
+La interfaz interactiva de Swagger está disponible en `http://localhost:4500/api-docs` durante el desarrollo separado y en `http://localhost:4000/api-docs` cuando Express sirve el cliente compilado:
 
 ```text
-http://localhost:4000/api-docs
+Desarrollo separado: http://localhost:4500/api-docs
+Cliente compilado:   http://localhost:4000/api-docs
 ```
 
 La autenticación usa JWT en cookie HttpOnly o en el encabezado `Authorization: Bearer <token>`.

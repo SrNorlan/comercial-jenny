@@ -9,7 +9,7 @@
 - Proyecto ubicado en:
 
 ```text
-C:\Users\owner\Desktop\AMC Jenny 2.0
+C:\Users\owner\Documents\git\comercial-jenny
 ```
 
 Esta guía está preparada para PostgreSQL 18.
@@ -93,7 +93,7 @@ No subas `.env` a Git. Ya está incluido en `.gitignore`.
 ## 4. Entrar a la carpeta del proyecto
 
 ```powershell
-cd "C:\Users\owner\Desktop\AMC Jenny 2.0"
+cd "C:\Users\owner\Documents\git\comercial-jenny"
 ```
 
 ## 5. Crear la base de datos
@@ -245,18 +245,25 @@ Se usa `npm.cmd` porque algunas configuraciones de PowerShell bloquean `npm.ps1`
 
 ## 10. Iniciar la aplicación
 
-Para iniciar Express con el cliente React compilado y la API:
+Para desarrollo con recarga, abre dos terminales desde la raíz del proyecto. En la primera inicia la API:
 
 ```powershell
-npm.cmd run dev
+npm.cmd run dev:api
 ```
 
-Direcciones:
+En la segunda inicia el cliente React/Vite:
+
+```powershell
+npm.cmd --prefix client run dev
+```
+
+Direcciones de desarrollo:
 
 ```text
-Aplicacion:      http://localhost:4000/
-Swagger UI:      http://localhost:4000/api-docs
-Health check:    http://localhost:4000/api/v1/health
+Aplicación:      http://localhost:4000/
+API:             http://localhost:4500/
+Swagger UI:      http://localhost:4500/api-docs
+Health check:    http://localhost:4500/api/v1/health
 ```
 
 La API tambien puede iniciarse de forma independiente con `npm.cmd run dev:api`; en ese caso queda en `http://localhost:4500` y Swagger en `http://localhost:4500/api-docs`.
