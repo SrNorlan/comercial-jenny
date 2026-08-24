@@ -38,11 +38,17 @@ describe('API REST migrada', () => {
   beforeEach(() => jest.clearAllMocks());
 
   test('inicia sesion y establece cookie JWT', async () => {
-    authService.login.mockResolvedValue({ token: 'token', user: { usuario: 'demo', rol: 'Vendedor' } });
+    authService.login.mockResolvedValue({
+      token: 'token',
+      user: { usuario: 'demo', rol: 'Vendedor' },
+    });
     const res = response();
     await authController.login({ body: { usuario: 'demo', contrasena: 'admin' } }, res, jest.fn());
     expect(res.cookie).toHaveBeenCalledWith('token', 'token', expect.any(Object));
-    expect(res.json).toHaveBeenCalledWith({ success: true, data: { usuario: 'demo', rol: 'Vendedor' } });
+    expect(res.json).toHaveBeenCalledWith({
+      success: true,
+      data: { usuario: 'demo', rol: 'Vendedor' },
+    });
   });
 
   test('lista clientes, productos, ventas, compras, devoluciones, colaboradores y proveedores', async () => {
@@ -56,11 +62,25 @@ describe('API REST migrada', () => {
       ['proveedores', suppliersController, suppliersService],
     ];
     for (const [name, controller, service] of cases) {
-      service.list.mockResolvedValue([{ id: 1 }]);
+      service.list.mockResolvedValue({
+        data: [{ id: 1 }],
+        total: 1,
+        page: 1,
+        totalPages: 1,
+        limit: 10,
+      });
       const res = response();
       await controller.list({ query: {} }, res, jest.fn());
       if (!res.json.mock.calls.length) throw new Error(`El listado no respondio para ${name}`);
-      expect(res.json).toHaveBeenCalledWith({ success: true, data: [{ id: 1 }] });
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          data: [{ id: 1 }],
+          total: 1,
+          page: 1,
+          totalPages: 1,
+        }),
+      );
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ data: expect.any(Array) }));
       expect(name).toBeTruthy();
     }

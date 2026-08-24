@@ -17,8 +17,8 @@ app.use('/api/v1', apiRoutes);
 const clientDist = path.resolve(__dirname, '../../client/dist');
 app.use(express.static(clientDist));
 app.get('*', (req, res, next) => {
-	if (req.path.startsWith('/api/')) return next();
-	return res.sendFile(path.join(clientDist, 'index.html'), (error) => error && next());
+  if (req.path.startsWith('/api/')) return next();
+  return res.sendFile(path.join(clientDist, 'index.html'), (error) => error && next());
 });
 app.use((req, res) => res.status(404).json({ success: false, message: 'Endpoint no encontrado.' }));
 app.use(errorHandler);

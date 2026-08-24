@@ -19,7 +19,10 @@ export function AuthProvider({ children }) {
     setLoading(true);
     setError('');
     try {
-      const result = await api('/auth/login', { method: 'POST', body: JSON.stringify(credentials) });
+      const result = await api('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(credentials),
+      });
       setUser(result.data);
       return result.data;
     } catch (reason) {
@@ -35,7 +38,11 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
-  return <AuthContext.Provider value={{ user, loading, error, login, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, loading, error, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

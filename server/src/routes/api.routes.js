@@ -10,7 +10,9 @@ const employeesRoutes = require('../modules/employees/employees.routes');
 const suppliersRoutes = require('../modules/suppliers/suppliers.routes');
 const reportsRoutes = require('../modules/reports/reports.routes');
 
-router.get('/health', (req, res) => res.json({ success: true, data: { service: 'comercial-jenny-api', status: 'ok' } }));
+router.get('/health', (req, res) =>
+  res.json({ success: true, data: { service: 'comercial-jenny-api', status: 'ok' } }),
+);
 router.use('/auth', authRoutes);
 router.use('/clients', clientsRoutes);
 router.use('/products', productsRoutes);

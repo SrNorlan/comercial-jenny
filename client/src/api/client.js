@@ -9,5 +9,7 @@ export async function api(path, options = {}) {
   return body;
 }
 
-export const pick = (item, keys, fallback = '') => keys.map((key) => item?.[key]).find((value) => value !== undefined && value !== null) ?? fallback;
-export const money = (value) => `C$ ${Number(value || 0).toLocaleString('es-NI', { minimumFractionDigits: 2 })}`;
+export const pick = (item, keys, fallback = '') =>
+  keys.map((key) => item?.[key]).find((value) => value !== undefined && value !== null) ?? fallback;
+export const money = (value) =>
+  `C$ ${Number(value || 0).toLocaleString('es-NI', { minimumFractionDigits: 2 })}`;

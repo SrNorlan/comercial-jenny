@@ -20,9 +20,22 @@ const pool = new Pool({
   const hash = await bcrypt.hash(password, 12);
   const result = await pool.query(
     'UPDATE usuarios SET usuario = $1, contrasena = $2, rol = $3 WHERE usuario = $4',
-    ['admin', hash, 'Gerente', 'kenth060']
+    ['admin', hash, 'Gerente', 'kenth060'],
   );
   if (!result.rowCount) throw new Error('No se encontró el usuario kenth060.');
-  const verification = await pool.query('SELECT usuario, rol, contrasena FROM usuarios WHERE usuario = $1', ['admin']);
-  console.log({ updated: result.rowCount, usuario: verification.rows[0].usuario, rol: verification.rows[0].rol, passwordValid: await bcrypt.compare(password, verification.rows[0].contrasena) });
-})().catch((error) => { console.error(error.message); process.exitCode = 1; }).finally(() => pool.end());
+  const verification = await pool.query(
+    'SELECT usuario, rol, contrasena FROM usuarios WHERE usuario = $1',
+    ['admin'],
+  );
+  console.log({
+    updated: result.rowCount,
+    usuario: verification.rows[0].usuario,
+    rol: verification.rows[0].rol,
+    passwordValid: await bcrypt.compare(password, verification.rows[0].contrasena),
+  });
+})()
+  .catch((error) => {
+    console.error(error.message);
+    process.exitCode = 1;
+  })
+  .finally(() => pool.end());

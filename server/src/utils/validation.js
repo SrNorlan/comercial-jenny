@@ -34,4 +34,10 @@ function validateItems(items, type) {
   });
 }
 
-module.exports = { validationError, requirePositiveNumber, requirePositiveInteger, requireNonNegativeNumber, validateItems };
+module.exports = {
+  validationError,
+  requirePositiveNumber,
+  requirePositiveInteger,
+  requireNonNegativeNumber,
+  validateItems,
+};

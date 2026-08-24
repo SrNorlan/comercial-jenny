@@ -1,7 +1,17 @@
 import { useEffect, useState } from 'react';
 import { loadResources } from '../api/resources.api';
 
-const emptyData = { clients: [], products: [], sales: [], installments: [], purchases: [], suppliers: [], employees: [], returns: [], summary: null };
+const emptyData = {
+  clients: [],
+  products: [],
+  sales: [],
+  installments: [],
+  purchases: [],
+  suppliers: [],
+  employees: [],
+  returns: [],
+  summary: null,
+};
 
 export default function useResources(user, view) {
   const [data, setData] = useState(emptyData);

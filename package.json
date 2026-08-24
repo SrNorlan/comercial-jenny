@@ -4,6 +4,9 @@
   "main": "app.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "start": "node app.js",
     "build:client": "npm --prefix client run build",
     "start:api": "node server/src/index.js",
@@ -40,8 +43,12 @@
   },
   "description": "",
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "cross-env": "^7.0.3",
+    "eslint": "^9.39.5",
+    "globals": "^16.5.0",
     "jest": "^29.7.0",
+    "prettier": "^3.9.6",
     "supertest": "^7.1.0"
   }
 }

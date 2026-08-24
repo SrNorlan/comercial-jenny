@@ -1,13 +1,201 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import Pagination from '../components/ui/Pagination';
 import { api, pick } from '../api/client';
 
-const emptyEmployee = { tipoPersona: 'Vendedor', nombre: '', apellido: '', cedula: '', telefono: '', distrito: 'I', zonaResidencia: '', puntoReferencia: '', casa: '', usuario: '', contrasena: '' };
-const fields = [['nombre', 'Nombre'], ['apellido', 'Apellido'], ['cedula', 'Cédula'], ['telefono', 'Teléfono'], ['zonaResidencia', 'Zona'], ['casa', 'Casa / dirección'], ['usuario', 'Usuario'], ['contrasena', 'Contraseña']];
+const emptyEmployee = {
+  tipoPersona: 'Vendedor',
+  nombre: '',
+  apellido: '',
+  cedula: '',
+  telefono: '',
+  distrito: 'I',
+  zonaResidencia: '',
+  puntoReferencia: '',
+  casa: '',
+  usuario: '',
+  contrasena: '',
+};
+const fields = [
+  ['nombre', 'Nombre'],
+  ['apellido', 'Apellido'],
+  ['cedula', 'Cédula'],
+  ['telefono', 'Teléfono'],
+  ['zonaResidencia', 'Zona'],
+  ['casa', 'Casa / dirección'],
+  ['usuario', 'Usuario'],
+  ['contrasena', 'Contraseña'],
+];
 export default function EmployeesPage({ employees, onCreated }) {
-  const [open, setOpen] = useState(false); const [editingId, setEditingId] = useState(null); const [query, setQuery] = useState(''); const [form, setForm] = useState(emptyEmployee); const [message, setMessage] = useState('');
-  const filtered = employees.filter((employee) => JSON.stringify(employee).toLowerCase().includes(query.toLowerCase()));
-  function edit(employee) { setEditingId(employee.id_vendedor); setForm({ tipoPersona: employee.tipo_persona, nombre: employee.nombre?.split(' ')[0] || '', apellido: employee.nombre?.split(' ').slice(1).join(' ') || '', cedula: employee.cedula || '', telefono: employee.telefono || '', distrito: employee.direccion?.match(/Distrito ([^,]+)/)?.[1] || 'I', zonaResidencia: employee.direccion?.split(', ')[1] || '', casa: employee.direccion?.match(/Casa (.*)$/)?.[1] || '' }); setOpen(true); setMessage(''); }
-  async function submit(event) { event.preventDefault(); try { await api(editingId ? `/employees/${editingId}` : '/employees', { method: editingId ? 'PUT' : 'POST', body: JSON.stringify(form) }); setMessage(editingId ? 'Colaborador actualizado correctamente.' : 'Colaborador creado correctamente.'); setForm(emptyEmployee); setEditingId(null); onCreated(); } catch (error) { setMessage(error.message); } }
-  async function toggle(employee) { const next = employee.estado === 'Activo' ? 'Inactivo' : 'Activo'; try { await api(`/employees/${employee.id_vendedor}/status`, { method: 'PATCH', body: JSON.stringify({ estado: next }) }); onCreated(); } catch (error) { setMessage(error.message); } }
-  return <section className="module-view"><div className="module-toolbar"><div><p className="eyebrow">EQUIPO</p><h2>Colaboradores</h2></div><div className="module-actions"><div className="module-search">⌕ <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar colaborador..." /></div><button type="button" className="new-sale" onClick={() => { setOpen(!open); setEditingId(null); setForm(emptyEmployee); }}>{open ? 'Cerrar' : '+ Nuevo colaborador'}</button></div></div>{open && <form className="product-form" onSubmit={submit}><div><p className="eyebrow">{editingId ? 'EDITAR REGISTRO' : 'NUEVO REGISTRO'}</p><h3>{editingId ? 'Editar colaborador' : 'Agregar colaborador'}</h3></div><div className="form-grid"><label>Cargo<select value={form.tipoPersona} onChange={(event) => setForm({ ...form, tipoPersona: event.target.value })}><option>Vendedor</option><option>Supervisor</option><option>Sub-Gerente</option><option>Gerente</option></select></label>{fields.map(([key, label]) => <label key={key}>{label}<input required={['nombre', 'apellido', 'cedula', 'telefono', 'zonaResidencia'].includes(key)} value={form[key]} onChange={(event) => setForm({ ...form, [key]: event.target.value })} /></label>)}</div><div className="form-summary"><span>Cargo <strong>{form.tipoPersona}</strong></span><button type="submit" className="checkout-button">{editingId ? 'Actualizar' : 'Guardar'} <span>→</span></button></div>{message && <p className={message.includes('correctamente') ? 'success' : 'error'}>{message}</p>}</form>}<div className="client-list">{filtered.map((employee, index) => <article className="client-row" key={employee.id_vendedor || index}><span className="client-avatar">{String(pick(employee, ['nombre'], 'C')).slice(0, 1)}</span><div><strong>{pick(employee, ['nombre', 'nombre_completo'], 'Colaborador')}</strong><small>{pick(employee, ['tipo_persona', 'rol'], 'Equipo')}</small></div><span className="client-credit"><small>{pick(employee, ['estado'], 'Activo')}</small></span><button type="button" className="text-button" onClick={() => edit(employee)}>Editar</button><button type="button" className="text-button" onClick={() => toggle(employee)}>{employee.estado === 'Activo' ? 'Desactivar' : 'Activar'}</button></article>)}</div></section>;
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [query, setQuery] = useState('');
+  const [form, setForm] = useState(emptyEmployee);
+  const [message, setMessage] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const filtered = useMemo(
+    () =>
+      employees.filter((employee) =>
+        JSON.stringify(employee).toLowerCase().includes(query.toLowerCase()),
+      ),
+    [employees, query],
+  );
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  function edit(employee) {
+    setEditingId(employee.id_vendedor);
+    setForm({
+      tipoPersona: employee.tipo_persona,
+      nombre: employee.nombre?.split(' ')[0] || '',
+      apellido: employee.nombre?.split(' ').slice(1).join(' ') || '',
+      cedula: employee.cedula || '',
+      telefono: employee.telefono || '',
+      distrito: employee.direccion?.match(/Distrito ([^,]+)/)?.[1] || 'I',
+      zonaResidencia: employee.direccion?.split(', ')[1] || '',
+      casa: employee.direccion?.match(/Casa (.*)$/)?.[1] || '',
+    });
+    setOpen(true);
+    setMessage('');
+  }
+  async function submit(event) {
+    event.preventDefault();
+    try {
+      await api(editingId ? `/employees/${editingId}` : '/employees', {
+        method: editingId ? 'PUT' : 'POST',
+        body: JSON.stringify(form),
+      });
+      setMessage(
+        editingId ? 'Colaborador actualizado correctamente.' : 'Colaborador creado correctamente.',
+      );
+      setForm(emptyEmployee);
+      setEditingId(null);
+      onCreated();
+    } catch (error) {
+      setMessage(error.message);
+    }
+  }
+  async function toggle(employee) {
+    const next = employee.estado === 'Activo' ? 'Inactivo' : 'Activo';
+    try {
+      await api(`/employees/${employee.id_vendedor}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ estado: next }),
+      });
+      onCreated();
+    } catch (error) {
+      setMessage(error.message);
+    }
+  }
+  return (
+    <section className="module-view">
+      <div className="module-toolbar">
+        <div>
+          <p className="eyebrow">EQUIPO</p>
+          <h2>Colaboradores</h2>
+        </div>
+        <div className="module-actions">
+          <div className="module-search">
+            ⌕{' '}
+            <input
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setPage(1);
+              }}
+              placeholder="Buscar colaborador..."
+            />
+          </div>
+          <button
+            type="button"
+            className="new-sale"
+            onClick={() => {
+              setOpen(!open);
+              setEditingId(null);
+              setForm(emptyEmployee);
+            }}
+          >
+            {open ? 'Cerrar' : '+ Nuevo colaborador'}
+          </button>
+        </div>
+      </div>
+      {open && (
+        <form className="product-form" onSubmit={submit}>
+          <div>
+            <p className="eyebrow">{editingId ? 'EDITAR REGISTRO' : 'NUEVO REGISTRO'}</p>
+            <h3>{editingId ? 'Editar colaborador' : 'Agregar colaborador'}</h3>
+          </div>
+          <div className="form-grid">
+            <label>
+              Cargo
+              <select
+                value={form.tipoPersona}
+                onChange={(event) => setForm({ ...form, tipoPersona: event.target.value })}
+              >
+                <option>Vendedor</option>
+                <option>Supervisor</option>
+                <option>Sub-Gerente</option>
+                <option>Gerente</option>
+              </select>
+            </label>
+            {fields.map(([key, label]) => (
+              <label key={key}>
+                {label}
+                <input
+                  required={['nombre', 'apellido', 'cedula', 'telefono', 'zonaResidencia'].includes(
+                    key,
+                  )}
+                  value={form[key]}
+                  onChange={(event) => setForm({ ...form, [key]: event.target.value })}
+                />
+              </label>
+            ))}
+          </div>
+          <div className="form-summary">
+            <span>
+              Cargo <strong>{form.tipoPersona}</strong>
+            </span>
+            <button type="submit" className="checkout-button">
+              {editingId ? 'Actualizar' : 'Guardar'} <span>→</span>
+            </button>
+          </div>
+          {message && (
+            <p className={message.includes('correctamente') ? 'success' : 'error'}>{message}</p>
+          )}
+        </form>
+      )}
+      <div className="client-list">
+        {paginated.map((employee, index) => (
+          <article className="client-row" key={employee.id_vendedor || index}>
+            <span className="client-avatar">
+              {String(pick(employee, ['nombre'], 'C')).slice(0, 1)}
+            </span>
+            <div>
+              <strong>{pick(employee, ['nombre', 'nombre_completo'], 'Colaborador')}</strong>
+              <small>{pick(employee, ['tipo_persona', 'rol'], 'Equipo')}</small>
+            </div>
+            <span className="client-credit">
+              <small>{pick(employee, ['estado'], 'Activo')}</small>
+            </span>
+            <button type="button" className="text-button" onClick={() => edit(employee)}>
+              Editar
+            </button>
+            <button type="button" className="text-button" onClick={() => toggle(employee)}>
+              {employee.estado === 'Activo' ? 'Desactivar' : 'Activar'}
+            </button>
+          </article>
+        ))}
+      </div>
+      <Pagination
+        page={currentPage}
+        pageSize={pageSize}
+        totalItems={filtered.length}
+        onPageChange={setPage}
+        onPageSizeChange={(nextSize) => {
+          setPageSize(nextSize);
+          setPage(1);
+        }}
+      />
+    </section>
+  );
 }

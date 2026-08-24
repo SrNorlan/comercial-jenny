@@ -150,9 +150,7 @@ El payload de venta usa:
   "idVendedor": 2,
   "tipoVenta": "Contado",
   "totalVenta": 100,
-  "items": [
-    { "idProducto": 1, "cantidad": 1, "precioUnitario": 100 }
-  ]
+  "items": [{ "idProducto": 1, "cantidad": 1, "precioUnitario": 100 }]
 }
 ```
 
