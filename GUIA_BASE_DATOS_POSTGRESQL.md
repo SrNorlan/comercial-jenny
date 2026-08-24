@@ -6,13 +6,8 @@
 - PostgreSQL 14 o superior
 - PostgreSQL instalado en el puerto `5432`
 - Node.js y npm
-- Proyecto ubicado en:
 
-```text
-C:\Users\owner\Documents\git\comercial-jenny
-```
-
-Esta guía está preparada para PostgreSQL 18.
+Los ejemplos usan Windows PowerShell. Si el proyecto está en otra carpeta, sustituye la ruta local.
 
 ## 1. Verificar PostgreSQL
 
@@ -51,13 +46,13 @@ node --version
 npm.cmd --version
 ```
 
-Debe aparecer una versión similar a:
+Debe aparecer una versión igual o superior a PostgreSQL 14, por ejemplo:
 
 ```text
 psql (PostgreSQL) 18.6
 ```
 
-Si `psql` no funciona, verifica que exista este archivo:
+Si `psql` no funciona, verifica que exista `psql.exe` dentro de la carpeta `bin` de tu instalación. Para PostgreSQL 18:
 
 ```text
 C:\Program Files\PostgreSQL\18\bin\psql.exe
@@ -74,17 +69,21 @@ El archivo activo está en la raíz del proyecto:
 Debe contener valores similares a estos:
 
 ```env
+NODE_ENV=development
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=TU_CONTRASENA_DE_POSTGRES
 DB_DATABASE=comercial_jenny
+API_PORT=4500
+APP_PORT=4000
+CLIENT_URL=http://localhost:4000
 
 JWT_SECRET=AlmacenJenny
 JWT_EXPIRES_IN=4h
 ```
 
-Reemplaza `TU_CONTRASENA_DE_POSTGRES` por la contraseña definida durante la instalación de PostgreSQL.
+Reemplaza `TU_CONTRASENA_DE_POSTGRES` por la contraseña definida durante la instalación de PostgreSQL. `APP_PORT` es el puerto de Express cuando sirve el cliente compilado; Vite usa el puerto `4000` durante el desarrollo separado.
 
 El valor `DB_PASSWORD` es la contraseña de PostgreSQL. No es la contraseña de inicio de sesión de la aplicación.
 
@@ -266,31 +265,38 @@ Swagger UI:      http://localhost:4500/api-docs
 Health check:    http://localhost:4500/api/v1/health
 ```
 
-La API tambien puede iniciarse de forma independiente con `npm.cmd run dev:api`; en ese caso queda en `http://localhost:4500` y Swagger en `http://localhost:4500/api-docs`.
+La API también puede iniciarse de forma independiente con `npm.cmd run dev:api`; en ese caso queda en `http://localhost:4500` y Swagger en `http://localhost:4500/api-docs`.
+
+Para levantar el cliente compilado y Express con un solo comando:
+
+```powershell
+npm.cmd run dev:all
+```
+
+Este comando compila el cliente y luego inicia Express en `http://localhost:4000`. Para desarrollo con recarga de Vite y la API, utiliza las dos terminales descritas arriba.
 
 ## 11. Usuario de prueba
 
-El usuario configurado para iniciar sesión en la aplicacion es:
+El seed crea usuarios históricos. Para crear un acceso conocido para la instalación, restablece el usuario gerente `kenth060` como `admin` usando una contraseña elegida por la persona que levanta el sistema:
 
 ```text
-Usuario: admin
-Contraseña: admin
+Usuario inicial del seed: kenth060
 Rol: Gerente
 ```
 
-La contraseña se guarda cifrada con bcrypt en PostgreSQL.
+La contraseña se guarda cifrada con bcrypt en PostgreSQL. No se debe asumir una contraseña fija del seed.
 
 ## 12. Restablecer el usuario admin
 
-Si necesitas volver a configurar el usuario `admin`, ejecuta desde la raíz:
+Ejecuta desde la raíz del proyecto:
 
 ```powershell
-$env:ADMIN_PASSWORD = "admin"
+$env:ADMIN_PASSWORD = "elige-una-contrasena-segura"
 node server\scripts\reset-admin.js
 Remove-Item Env:ADMIN_PASSWORD
 ```
 
-El script actualiza el usuario gerente original y guarda la contraseña usando bcrypt.
+El script actualiza `kenth060` a `admin` y guarda la contraseña usando bcrypt. Debe ejecutarse después de cargar el seed y antes de iniciar sesión con `admin`.
 
 ## 13. Comprobar la API
 
@@ -363,3 +369,21 @@ Comprueba que:
 3. Se hayan ejecutado el esquema y el seed.
 4. El servidor original se haya reiniciado después de cambiar archivos.
 5. Estés entrando por `http://localhost:4000/login`.
+
+## Calidad y pruebas
+
+Desde la raíz del proyecto puedes verificar la instalación con:
+
+```powershell
+npm.cmd run lint
+npm.cmd test -- --runInBand
+npm.cmd run build:client
+```
+
+Para aplicar el formato Prettier:
+
+```powershell
+npm.cmd run format
+```
+
+`npm.cmd run format:check` puede reportar archivos históricos que todavía no han sido normalizados.
