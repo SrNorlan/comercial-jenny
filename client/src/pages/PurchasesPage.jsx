@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import Pagination from '../components/ui/Pagination';
 import { api, money, pick } from '../api/client';
 
@@ -12,6 +13,7 @@ export default function PurchasesPage({ purchases, products, suppliers, user, on
     precioVenta: '',
   });
   const [message, setMessage] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const totalPages = Math.max(1, Math.ceil(purchases.length / pageSize));
@@ -20,6 +22,9 @@ export default function PurchasesPage({ purchases, products, suppliers, user, on
   const total = Number(form.cantidad || 0) * Number(form.precioCompra || 0);
   async function submit(event) {
     event.preventDefault();
+    setConfirmOpen(true);
+  }
+  async function savePurchase() {
     setMessage('');
     try {
       await api('/purchases', {
@@ -71,7 +76,8 @@ export default function PurchasesPage({ purchases, products, suppliers, user, on
         </button>
       </div>
       {open && (
-        <form className="product-form" onSubmit={submit}>
+        <div className="form-modal-backdrop">
+          <form className="product-form form-modal" onSubmit={submit}>
           <div>
             <p className="eyebrow">NUEVO INGRESO</p>
             <h3>Registrar compra</h3>
@@ -151,7 +157,9 @@ export default function PurchasesPage({ purchases, products, suppliers, user, on
           {message && (
             <p className={message.includes('correctamente') ? 'success' : 'error'}>{message}</p>
           )}
-        </form>
+          <button type="button" className="form-cancel" onClick={() => setOpen(false)}>Cancelar</button>
+          </form>
+        </div>
       )}
       <div className="records-table">
         {paginated.map((purchase, index) => (
@@ -181,6 +189,14 @@ export default function PurchasesPage({ purchases, products, suppliers, user, on
           setPageSize(nextSize);
           setPage(1);
         }}
+      />
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Registrar compra"
+        message={`Se registrará una compra por ${money(total)} y se actualizará el inventario.`}
+        confirmLabel="Registrar compra"
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => { setConfirmOpen(false); savePurchase(); }}
       />
     </section>
   );

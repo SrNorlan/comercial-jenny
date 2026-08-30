@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import { api, money, pick } from '../api/client';
 
 export default function PosPage({ products, clients, user, onComplete }) {
@@ -7,6 +8,7 @@ export default function PosPage({ products, clients, user, onComplete }) {
   const [clientId, setClientId] = useState('');
   const [type, setType] = useState('Contado');
   const [message, setMessage] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [category, setCategory] = useState('Todos');
   const categories = ['Todos', ...new Set(products.map((product) => product.categoria).filter(Boolean))];
   const available = products.filter((product) =>
@@ -41,9 +43,13 @@ export default function PosPage({ products, clients, user, onComplete }) {
   }
   async function checkout(event) {
     event.preventDefault();
+    setConfirmOpen(true);
+  }
+  async function saveSale() {
     setMessage('');
+    const invoiceWindow = window.open('', '_blank');
     try {
-      await api('/sales', {
+      const result = await api('/sales', {
         method: 'POST',
         body: JSON.stringify({
           idVenta: Date.now() % 1000000000,
@@ -58,11 +64,15 @@ export default function PosPage({ products, clients, user, onComplete }) {
           })),
         }),
       });
+      if (invoiceWindow && result.data?.idVenta) {
+        invoiceWindow.location.href = `/api/v1/sales/${result.data.idVenta}/invoice`;
+      }
       setCart([]);
       setClientId('');
       setMessage('Venta registrada correctamente.');
       onComplete();
     } catch (error) {
+      invoiceWindow?.close();
       setMessage(error.message);
     }
   }
@@ -207,6 +217,14 @@ export default function PosPage({ products, clients, user, onComplete }) {
           </button>
         </form>
       </aside>
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Confirmar venta"
+        message={`Se registrará una venta ${type.toLowerCase()} por ${money(total)}.`}
+        confirmLabel="Registrar venta"
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => { setConfirmOpen(false); saveSale(); }}
+      />
     </section>
   );
 }

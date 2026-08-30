@@ -1746,6 +1746,104 @@ em,
   border: 1px solid var(--line-blue);
   border-radius: 7px;
 }
+.confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  z-index: 60;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(9, 36, 63, 0.42);
+  backdrop-filter: blur(3px);
+}
+.confirm-dialog {
+  width: min(100%, 430px);
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid var(--line-blue);
+  border-top: 4px solid var(--orange-500);
+  border-radius: 12px;
+  box-shadow: 0 22px 60px rgba(9, 36, 63, 0.22);
+}
+.confirm-dialog h3 {
+  margin: 0.45rem 0 0.5rem;
+  color: var(--navy-950);
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.15rem;
+}
+.confirm-dialog > p:not(.eyebrow) {
+  margin: 0;
+  color: var(--muted-blue);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+.confirm-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin: 1.25rem 0;
+  color: var(--ink);
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+.confirm-check input {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  accent-color: var(--orange-500);
+}
+.confirm-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+.confirm-actions .checkout-button {
+  width: auto;
+  margin: 0;
+}
+.confirm-actions .checkout-button:disabled {
+  background: #c6d2dc;
+  opacity: 1;
+}
+.form-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  z-index: 50;
+  place-items: center;
+  padding: 1rem;
+  overflow-y: auto;
+  background: rgba(9, 36, 63, 0.38);
+  backdrop-filter: blur(3px);
+}
+.form-modal {
+  width: min(100%, 780px);
+  max-height: calc(100vh - 2rem);
+  margin: 0;
+  padding: 1.6rem;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--line-blue);
+  border-top: 4px solid var(--orange-500);
+  border-radius: 12px;
+  box-shadow: 0 24px 65px rgba(9, 36, 63, 0.22);
+}
+.form-cancel {
+  display: block;
+  margin: 0.2rem 0 0 auto;
+  padding: 0.7rem 1rem;
+  color: var(--muted-blue);
+  background: transparent;
+  border: 1px solid var(--line-blue);
+  border-radius: 7px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.form-cancel:hover {
+  color: var(--navy-800);
+  background: var(--blue-100);
+}
 @media (max-width: 680px) {
   .record-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1790,5 +1888,21 @@ em,
   .pagination-controls button {
     width: 2.25rem;
     height: 2.25rem;
+  }
+  .confirm-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+  .confirm-actions .checkout-button {
+    width: 100%;
+  }
+  .form-modal-backdrop {
+    align-items: start;
+    padding: 0.65rem;
+  }
+  .form-modal {
+    max-height: calc(100vh - 1.3rem);
+    padding: 1.15rem;
+    border-radius: 10px;
   }
 }

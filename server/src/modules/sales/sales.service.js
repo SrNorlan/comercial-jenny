@@ -6,18 +6,23 @@ const {
   validationError,
 } = require('../../utils/validation');
 
-async function list() {
-  const { rows } = await db.query('SELECT * FROM mostrarventas ORDER BY fecha_venta DESC');
+async function list(actor) {
+  const sellerId = actor?.rol === 'Vendedor' ? actor.id_persona : null;
+  const { rows } = await db.query(
+    'SELECT mv.* FROM mostrarventas mv JOIN venta base ON base.id_venta = mv.id_venta WHERE ($1::int IS NULL OR base.id_vendedor = $1) ORDER BY mv.fecha_venta DESC',
+    [sellerId],
+  );
   return rows;
 }
 
-async function invoice(idVenta) {
+async function invoice(idVenta, actor) {
+  const sellerId = actor?.rol === 'Vendedor' ? actor.id_persona : null;
   const sale = await db.query(
     `SELECT v.id_venta, v.fecha_venta, v.tipo_venta, v.total_venta,
     concat(c.nombre, ' ', c.apellido) AS cliente, concat(p.nombre, ' ', p.apellido) AS vendedor
     FROM venta v JOIN persona c ON c.id_persona = v.id_cliente JOIN persona p ON p.id_persona = v.id_vendedor
-    WHERE v.id_venta = $1`,
-    [idVenta],
+    WHERE v.id_venta = $1 AND ($2::int IS NULL OR v.id_vendedor = $2)`,
+    [idVenta, sellerId],
   );
   if (!sale.rows.length) {
     const error = new Error('La venta no existe.');
@@ -43,7 +48,7 @@ async function create({
   plazoCompra,
   frecuenciaAbonos,
   items,
-}) {
+}, actor) {
   requirePositiveInteger(idVenta, 'El identificador de venta');
   requirePositiveInteger(idCliente, 'El cliente');
   requirePositiveInteger(idVendedor, 'El vendedor');
@@ -51,6 +56,11 @@ async function create({
     throw validationError('El tipo de venta no es válido.');
   requirePositiveNumber(totalVenta, 'El total');
   validateItems(items, 'venta');
+  if (actor?.rol === 'Vendedor' && Number(idVendedor) !== Number(actor.id_persona)) {
+    const error = new Error('Solo puedes registrar ventas a tu nombre.');
+    error.statusCode = 403;
+    throw error;
+  }
   const client = await db.pool.connect();
   try {
     await client.query('BEGIN');

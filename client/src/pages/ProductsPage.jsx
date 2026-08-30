@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import { api, money } from '../api/client';
 
 const emptyProduct = {
@@ -18,7 +19,7 @@ export default function ProductsPage({ products, user, onSell, onCreated }) {
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState('');
-  const canManage = user?.rol === 'Gerente';
+  const [pendingAction, setPendingAction] = useState(null);
   const filtered = products.filter((product) =>
     `${product.tipo} ${product.marca} ${product.modelo} ${product.categoria}`
       .toLowerCase()
@@ -29,6 +30,13 @@ export default function ProductsPage({ products, user, onSell, onCreated }) {
       ? ((Number(form.precioVenta) - Number(form.precioCompra || 0)) / Number(form.precioVenta)) *
         100
       : 0;
+  const isStatusChange = pendingAction?.type === 'toggle';
+  const confirmationTitle = isStatusChange
+    ? 'Cambiar estado del producto'
+    : editingId
+      ? 'Actualizar producto'
+      : 'Guardar producto';
+  const confirmationLabel = isStatusChange ? 'Cambiar estado' : editingId ? 'Actualizar' : 'Guardar';
   function edit(product) {
     setEditingId(product.id_producto);
     setForm({
@@ -46,6 +54,9 @@ export default function ProductsPage({ products, user, onSell, onCreated }) {
   }
   async function submit(event) {
     event.preventDefault();
+    setPendingAction({ type: 'save' });
+  }
+  async function saveProduct() {
     try {
       await api(editingId ? `/products/${editingId}` : '/products', {
         method: editingId ? 'PUT' : 'POST',
@@ -63,6 +74,9 @@ export default function ProductsPage({ products, user, onSell, onCreated }) {
   }
   async function toggle(product) {
     const next = product.estado_producto === 'Activo' ? 'Inactivo' : 'Activo';
+    setPendingAction({ type: 'toggle', product, next });
+  }
+  async function changeProductStatus(product, next) {
     try {
       await api(`/products/${product.id_producto}/status`, {
         method: 'PATCH',
@@ -103,7 +117,8 @@ export default function ProductsPage({ products, user, onSell, onCreated }) {
         </div>
       </div>
       {open && (
-        <form className="product-form" onSubmit={submit}>
+        <div className="form-modal-backdrop">
+          <form className="product-form form-modal" onSubmit={submit}>
           <div>
             <p className="eyebrow">{editingId ? 'EDITAR REGISTRO' : 'NUEVO REGISTRO'}</p>
             <h3>{editingId ? 'Editar producto' : 'Agregar producto al catálogo'}</h3>
@@ -195,7 +210,9 @@ export default function ProductsPage({ products, user, onSell, onCreated }) {
           {message && (
             <p className={message.includes('correctamente') ? 'success' : 'error'}>{message}</p>
           )}
-        </form>
+          <button type="button" className="form-cancel" onClick={() => { setOpen(false); setEditingId(null); }}>Cancelar</button>
+          </form>
+        </div>
       )}
       <div className="product-grid">
         {filtered.map((product) => (
@@ -234,6 +251,19 @@ export default function ProductsPage({ products, user, onSell, onCreated }) {
           </article>
         ))}
       </div>
+      <ConfirmDialog
+        open={Boolean(pendingAction)}
+        title={confirmationTitle}
+        message={pendingAction?.type === 'toggle' ? `El producto quedará ${pendingAction.next.toLowerCase()}.` : 'Revisa los datos antes de confirmar el cambio.'}
+        confirmLabel={confirmationLabel}
+        onCancel={() => setPendingAction(null)}
+        onConfirm={() => {
+          const action = pendingAction;
+          setPendingAction(null);
+          if (action.type === 'toggle') changeProductStatus(action.product, action.next);
+          else saveProduct();
+        }}
+      />
     </section>
   );
 }

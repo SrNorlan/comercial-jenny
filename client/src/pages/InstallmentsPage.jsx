@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import { api, money, pick } from '../api/client';
 
 export default function InstallmentsPage({ installments, onPayment }) {
   const [selected, setSelected] = useState(null);
   const [amount, setAmount] = useState('');
   const [message, setMessage] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
   async function submit(event) {
     event.preventDefault();
+    setConfirmOpen(true);
+  }
+  async function savePayment() {
     try {
       await api('/installments', {
         method: 'POST',
@@ -56,7 +61,8 @@ export default function InstallmentsPage({ installments, onPayment }) {
         ))}
       </div>
       {selected && (
-        <form className="payment-box" onSubmit={submit}>
+        <div className="form-modal-backdrop">
+          <form className="payment-box form-modal" onSubmit={submit}>
           <strong>Abono para venta #{selected.id_venta}</strong>
           <input
             type="number"
@@ -71,8 +77,17 @@ export default function InstallmentsPage({ installments, onPayment }) {
             Cancelar
           </button>
           {message && <p className="error">{message}</p>}
-        </form>
+          </form>
+        </div>
       )}
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Registrar abono"
+        message={`Se aplicará un abono de ${money(amount)} a la venta #${selected?.id_venta}.`}
+        confirmLabel="Registrar abono"
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => { setConfirmOpen(false); savePayment(); }}
+      />
     </section>
   );
 }

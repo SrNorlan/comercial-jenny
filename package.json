@@ -12,7 +12,7 @@
     "start:api": "node server/src/index.js",
     "dev:api": "nodemon server/src/index.js",
     "dev": "nodemon app.js",
-    "dev:all": "npm run build:client && npm run dev"
+    "dev:all": "concurrently \"npm run dev:api\" \"npm --prefix client run dev\""
   },
   "keywords": [],
   "author": "",

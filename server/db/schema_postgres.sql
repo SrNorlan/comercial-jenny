@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS persona (
   credito_disponible NUMERIC(10,2) DEFAULT NULL, distrito VARCHAR(5) NOT NULL, zona_residencia VARCHAR(50) NOT NULL,
   punto_referencia VARCHAR(100), distancia VARCHAR(60), casa VARCHAR(50), estado estado_general_enum NOT NULL DEFAULT 'Activo', comercio VARCHAR(80)
 );
+ALTER TABLE persona ADD COLUMN IF NOT EXISTS id_vendedor INT REFERENCES persona(id_persona);
 CREATE TABLE IF NOT EXISTS usuarios (
   userid SERIAL PRIMARY KEY, usuario VARCHAR(50) NOT NULL UNIQUE, contrasena VARCHAR(255) NOT NULL,
   rol rol_usuario_enum NOT NULL, id_persona INT REFERENCES persona(id_persona) ON DELETE CASCADE
@@ -51,6 +52,17 @@ CREATE TABLE IF NOT EXISTS productos_devueltos (
 CREATE TABLE IF NOT EXISTS record_crediticio (
   id_record SERIAL PRIMARY KEY, id_cliente INT NOT NULL REFERENCES persona(id_persona), id_venta INT NOT NULL REFERENCES venta(id_venta), cantidad_productos_adquiridos INT NOT NULL, total_comprado NUMERIC(10,2) NOT NULL, fecha_compra DATE NOT NULL, estado_compra VARCHAR(30)
 );
+
+UPDATE persona AS cliente
+SET id_vendedor = asignacion.id_vendedor
+FROM (
+  SELECT DISTINCT ON (v.id_cliente) v.id_cliente, v.id_vendedor
+  FROM venta v
+  ORDER BY v.id_cliente, v.fecha_venta DESC, v.id_venta DESC
+) AS asignacion
+WHERE cliente.id_persona = asignacion.id_cliente
+  AND cliente.tipo_persona = 'Cliente'
+  AND cliente.id_vendedor IS NULL;
 
 CREATE OR REPLACE FUNCTION fn_venta_estado() RETURNS TRIGGER AS $$ BEGIN NEW.estado_venta := CASE WHEN NEW.tipo_venta = 'Contado' THEN 'Pagada'::estado_venta_enum ELSE 'Abonandose'::estado_venta_enum END; RETURN NEW; END; $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS tr_venta_bi ON venta;
@@ -106,7 +118,7 @@ END; $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS tr_productos_devueltos_ai ON productos_devueltos;
 CREATE TRIGGER tr_productos_devueltos_ai AFTER INSERT ON productos_devueltos FOR EACH ROW EXECUTE FUNCTION fn_devolucion();
 
-CREATE OR REPLACE VIEW mostrarclientes AS SELECT id_persona AS id_cliente, concat(nombre,' ',apellido) AS nombre, cedula, telefono, concat_ws(', ', 'Distrito '||distrito, zona_residencia, punto_referencia, 'Casa '||casa) AS direccion, credito_disponible, estado AS estado_cliente FROM persona WHERE tipo_persona = 'Cliente';
+CREATE OR REPLACE VIEW mostrarclientes AS SELECT c.id_persona AS id_cliente, concat(c.nombre,' ',c.apellido) AS nombre, c.cedula, c.telefono, concat_ws(', ', 'Distrito '||c.distrito, c.zona_residencia, c.punto_referencia, 'Casa '||c.casa) AS direccion, c.credito_disponible, c.estado AS estado_cliente, c.id_vendedor, COALESCE(concat(v.nombre,' ',v.apellido), 'Admin') AS vendedor_nombre FROM persona c LEFT JOIN persona v ON c.id_vendedor = v.id_persona WHERE c.tipo_persona = 'Cliente';
 CREATE OR REPLACE VIEW mostrarcolaboradores AS SELECT id_persona AS id_vendedor, tipo_persona, concat(nombre,' ',apellido) AS nombre, cedula, telefono, concat_ws(', ', 'Distrito '||distrito, zona_residencia, punto_referencia, 'Casa '||casa) AS direccion, estado FROM persona WHERE tipo_persona NOT IN ('Cliente','Proveedor');
 CREATE OR REPLACE VIEW mostrarproveedores AS SELECT id_persona AS id_proveedor, concat(nombre,' ',apellido) AS nombre, cedula, telefono, concat_ws(', ', 'Distrito '||distrito, zona_residencia, punto_referencia, 'Casa '||casa) AS direccion, comercio, estado FROM persona WHERE tipo_persona = 'Proveedor';
 CREATE OR REPLACE VIEW mostrarventas AS SELECT v.id_venta, v.plazo_compra, v.frecuencia_abonos, v.tipo_venta, concat(c.nombre,' ',c.apellido) AS cliente, concat(p.nombre,' ',p.apellido) AS vendedor, v.fecha_venta, v.total_venta, v.estado_venta FROM venta v JOIN persona c ON c.id_persona=v.id_cliente JOIN persona p ON p.id_persona=v.id_vendedor;

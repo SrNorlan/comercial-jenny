@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import Pagination from '../components/ui/Pagination';
 import { api, pick } from '../api/client';
 
@@ -31,6 +32,7 @@ export default function EmployeesPage({ employees, onCreated }) {
   const [query, setQuery] = useState('');
   const [form, setForm] = useState(emptyEmployee);
   const [message, setMessage] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const filtered = useMemo(
@@ -60,6 +62,9 @@ export default function EmployeesPage({ employees, onCreated }) {
   }
   async function submit(event) {
     event.preventDefault();
+    setConfirmOpen(true);
+  }
+  async function saveEmployee() {
     try {
       await api(editingId ? `/employees/${editingId}` : '/employees', {
         method: editingId ? 'PUT' : 'POST',
@@ -120,7 +125,8 @@ export default function EmployeesPage({ employees, onCreated }) {
         </div>
       </div>
       {open && (
-        <form className="product-form" onSubmit={submit}>
+        <div className="form-modal-backdrop">
+          <form className="product-form form-modal" onSubmit={submit}>
           <div>
             <p className="eyebrow">{editingId ? 'EDITAR REGISTRO' : 'NUEVO REGISTRO'}</p>
             <h3>{editingId ? 'Editar colaborador' : 'Agregar colaborador'}</h3>
@@ -162,7 +168,9 @@ export default function EmployeesPage({ employees, onCreated }) {
           {message && (
             <p className={message.includes('correctamente') ? 'success' : 'error'}>{message}</p>
           )}
-        </form>
+          <button type="button" className="form-cancel" onClick={() => { setOpen(false); setEditingId(null); }}>Cancelar</button>
+          </form>
+        </div>
       )}
       <div className="client-list">
         {paginated.map((employee, index) => (
@@ -195,6 +203,14 @@ export default function EmployeesPage({ employees, onCreated }) {
           setPageSize(nextSize);
           setPage(1);
         }}
+      />
+      <ConfirmDialog
+        open={confirmOpen}
+        title={editingId ? 'Actualizar colaborador' : 'Guardar colaborador'}
+        message="Verifica los datos y permisos antes de confirmar esta operación."
+        confirmLabel={editingId ? 'Actualizar' : 'Guardar'}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => { setConfirmOpen(false); saveEmployee(); }}
       />
     </section>
   );

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import Pagination from '../components/ui/Pagination';
 import { api, pick } from '../api/client';
 
@@ -18,6 +19,7 @@ export default function SuppliersPage({ suppliers, onCreated }) {
   const [query, setQuery] = useState('');
   const [form, setForm] = useState(emptySupplier);
   const [message, setMessage] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const filtered = useMemo(
@@ -32,6 +34,9 @@ export default function SuppliersPage({ suppliers, onCreated }) {
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   async function submit(event) {
     event.preventDefault();
+    setConfirmOpen(true);
+  }
+  async function saveSupplier() {
     try {
       await api('/suppliers', { method: 'POST', body: JSON.stringify(form) });
       setMessage('Proveedor creado correctamente.');
@@ -66,7 +71,8 @@ export default function SuppliersPage({ suppliers, onCreated }) {
         </div>
       </div>
       {open && (
-        <form className="product-form" onSubmit={submit}>
+        <div className="form-modal-backdrop">
+          <form className="product-form form-modal" onSubmit={submit}>
           <div>
             <p className="eyebrow">NUEVO REGISTRO</p>
             <h3>Agregar proveedor</h3>
@@ -150,7 +156,9 @@ export default function SuppliersPage({ suppliers, onCreated }) {
           {message && (
             <p className={message.includes('correctamente') ? 'success' : 'error'}>{message}</p>
           )}
-        </form>
+          <button type="button" className="form-cancel" onClick={() => setOpen(false)}>Cancelar</button>
+          </form>
+        </div>
       )}
       <div className="client-list">
         {paginated.map((supplier, index) => (
@@ -177,6 +185,14 @@ export default function SuppliersPage({ suppliers, onCreated }) {
           setPageSize(nextSize);
           setPage(1);
         }}
+      />
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Guardar proveedor"
+        message="Verifica los datos del proveedor antes de confirmar esta operación."
+        confirmLabel="Guardar"
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => { setConfirmOpen(false); saveSupplier(); }}
       />
     </section>
   );

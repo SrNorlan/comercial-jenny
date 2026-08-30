@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import { api, money } from '../api/client';
 
 export default function ReturnsPage({ sales, products, returns, onComplete }) {
@@ -9,8 +10,13 @@ export default function ReturnsPage({ sales, products, returns, onComplete }) {
     motivo: 'Producto defectuoso',
   });
   const [message, setMessage] = useState('');
+  const [open, setOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   async function submit(event) {
     event.preventDefault();
+    setConfirmOpen(true);
+  }
+  async function saveReturn() {
     setMessage('');
     try {
       await api('/returns', {
@@ -24,6 +30,7 @@ export default function ReturnsPage({ sales, products, returns, onComplete }) {
       });
       setMessage('Devolución registrada correctamente.');
       setForm({ idVenta: '', idProducto: '', cantidadDevuelta: 1, motivo: 'Producto defectuoso' });
+      setOpen(false);
       onComplete();
     } catch (error) {
       setMessage(error.message);
@@ -36,7 +43,10 @@ export default function ReturnsPage({ sales, products, returns, onComplete }) {
           <p className="eyebrow">INVENTARIO Y GARANTÍAS</p>
           <h2>Registrar devolución</h2>
         </div>
-        <span className="status-dot">● {returns.length} registradas</span>
+        <div className="module-actions">
+          <span className="status-dot">● {returns.length} registradas</span>
+          <button type="button" className="new-sale" onClick={() => setOpen(true)}>+ Nueva devolución</button>
+        </div>
       </div>
       <div className="return-layout">
         <div className="return-guide">
@@ -55,7 +65,10 @@ export default function ReturnsPage({ sales, products, returns, onComplete }) {
             </span>
           </div>
         </div>
-        <form className="return-form" onSubmit={submit}>
+        <div className="return-form-placeholder">
+          <p className="muted">Registra una devolución cuando un producto necesite cambio o revisión.</p>
+        </div>
+        {open && <div className="form-modal-backdrop"><form className="return-form form-modal" onSubmit={submit}>
           <label>
             Venta original
             <select
@@ -114,7 +127,8 @@ export default function ReturnsPage({ sales, products, returns, onComplete }) {
           <button type="submit" className="checkout-button">
             Confirmar devolución <span>→</span>
           </button>
-        </form>
+          <button type="button" className="form-cancel" onClick={() => setOpen(false)}>Cancelar</button>
+        </form></div>}
       </div>
       <div className="return-history">
         <div className="panel-heading">
@@ -140,6 +154,14 @@ export default function ReturnsPage({ sales, products, returns, onComplete }) {
           </div>
         ))}
       </div>
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Confirmar devolución"
+        message="La devolución modificará el inventario y quedará registrada en el historial."
+        confirmLabel="Registrar devolución"
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => { setConfirmOpen(false); saveReturn(); }}
+      />
     </section>
   );
 }

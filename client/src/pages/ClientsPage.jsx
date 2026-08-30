@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 import Pagination from '../components/ui/Pagination';
 import { api, money, pick } from '../api/client';
 
@@ -18,6 +19,7 @@ export default function ClientsPage({ clients, onCreated }) {
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const filtered = useMemo(
@@ -47,6 +49,9 @@ export default function ClientsPage({ clients, onCreated }) {
   }
   async function submit(event) {
     event.preventDefault();
+    setConfirmOpen(true);
+  }
+  async function saveClient() {
     try {
       await api(editingId ? `/clients/${editingId}` : '/clients', {
         method: editingId ? 'PUT' : 'POST',
@@ -107,7 +112,8 @@ export default function ClientsPage({ clients, onCreated }) {
         </div>
       </div>
       {open && (
-        <form className="product-form" onSubmit={submit}>
+        <div className="form-modal-backdrop">
+          <form className="product-form form-modal" onSubmit={submit}>
           <div>
             <p className="eyebrow">{editingId ? 'EDITAR REGISTRO' : 'NUEVO REGISTRO'}</p>
             <h3>{editingId ? 'Editar cliente' : 'Agregar cliente'}</h3>
@@ -156,7 +162,9 @@ export default function ClientsPage({ clients, onCreated }) {
           {message && (
             <p className={message.includes('correctamente') ? 'success' : 'error'}>{message}</p>
           )}
-        </form>
+          <button type="button" className="form-cancel" onClick={() => { setOpen(false); setEditingId(null); }}>Cancelar</button>
+          </form>
+        </div>
       )}
       <div className="client-list">
         {paginated.map((client, index) => (
@@ -170,6 +178,7 @@ export default function ClientsPage({ clients, onCreated }) {
               <strong>{pick(client, ['nombre', 'nombre_cliente', 'nombres'], 'Cliente')}</strong>
               <small>
                 {pick(client, ['cedula', 'telefono', 'celular'], 'Sin datos de contacto')}
+                {client.vendedor_nombre && ` • ${client.vendedor_nombre}`}
               </small>
             </div>
             <span className="client-credit">
@@ -194,6 +203,14 @@ export default function ClientsPage({ clients, onCreated }) {
           setPageSize(nextSize);
           setPage(1);
         }}
+      />
+      <ConfirmDialog
+        open={confirmOpen}
+        title={editingId ? 'Actualizar cliente' : 'Guardar cliente'}
+        message="Verifica los datos del cliente antes de confirmar esta operación."
+        confirmLabel={editingId ? 'Actualizar' : 'Guardar'}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => { setConfirmOpen(false); saveClient(); }}
       />
     </section>
   );
